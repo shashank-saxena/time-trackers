@@ -4,13 +4,13 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<groupId>com.app.newput</groupId>
-	<artifactId>JerseyDataBaseOperation</artifactId>
+	<artifactId>Tracker</artifactId>
 	<packaging>war</packaging>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>JerseyDataBaseOperation</name>
+	<name>Tracker</name>
 
 	<build>
-		<finalName>JerseyDataBaseOperation</finalName>
+		<finalName>Tracker</finalName>
 		<plugins>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
