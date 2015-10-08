@@ -2,6 +2,7 @@ package com.newput.service;
 
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.HashMap;
 
 import org.json.simple.JSONObject;
 //import org.json.simple.parser.JSONParser;
@@ -18,10 +19,47 @@ import com.newput.domain.Employee;
  */
 
 @Service
-public class ReqResParser {
+public class JsonResService {
 
 	@Autowired
 	private Employee emp;
+	
+	private String success;
+	private String rcode;
+	private String error;
+	private JSONObject data;
+
+	public String getSuccess() {
+		return success;
+	}
+
+	public void setSuccess(String success) {
+		this.success = success;
+	}
+
+	public String getRcode() {
+		return rcode;
+	}
+
+	public void setRcode(String rcode) {
+		this.rcode = rcode;
+	}
+
+	public String getError() {
+		return error;
+	}
+
+	public void setError(String error) {
+		this.error = error;
+	}
+
+	public JSONObject getData() {
+		return data;
+	}
+
+	public void setData(JSONObject data) {
+		this.data = data;
+	}
 
 	/**
 	 * Description - Create a Json to send into the response of UI
@@ -32,7 +70,7 @@ public class ReqResParser {
 		JSONObject obj = new JSONObject();
 		obj.put("firstName", "rahul");
 		obj.put("lastName", "kulmi");
-		obj.put("email", "rahul@newput.com");
+		obj.put("email", "deepak@newput.com");
 		obj.put("dob", new Date());
 		obj.put("doj", new Date());
 		obj.put("address", "indore");
@@ -47,6 +85,8 @@ public class ReqResParser {
 		obj.put("time_zone", new BigDecimal(5.5));
 		return obj;
 	}
+
+	
 
 	/**
 	 * Description -  To parse the Json object and set into the employee bean
@@ -73,8 +113,23 @@ public class ReqResParser {
 		emp.setUpdated((Long) obj_new.get("updated"));
 		emp.setTimeZone((BigDecimal) obj_new.get("time_zone"));
 	}
-
 	
+
+	@SuppressWarnings("unchecked")
+	public JSONObject responseSender(){
+		JSONObject obj = new JSONObject();
+		obj.put("response", getMap());
+		return obj;
+	}
+	
+	public HashMap<String, Object> getMap(){
+		HashMap<String, Object> map = new HashMap<>();
+		map.put("success", getSuccess());
+		map.put("data", getData());
+		map.put("rcode", getRcode());
+		map.put("error", getError());
+		return map;
+	}
 
 	
 }

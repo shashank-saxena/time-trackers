@@ -5,9 +5,9 @@
   <context id="tracker" ><plugin type="org.mybatis.generator.plugins.SerializablePlugin" />
     <jdbcConnection driverClass="com.mysql.jdbc.Driver" connectionURL="jdbc:mysql://localhost:3306/time_tracker" 
     userId="root" password="root" />
-    <javaModelGenerator targetPackage="com.newput.domain" targetProject="TimeTracker" />
-    <sqlMapGenerator targetPackage="com.newput.mapper" targetProject="TimeTracker" />
-    <javaClientGenerator targetPackage="com.newput.mapper" targetProject="TimeTracker" type="XMLMAPPER" />
+    <javaModelGenerator targetPackage="com.newput.domain" targetProject="Tracker" />
+    <sqlMapGenerator targetPackage="com.newput.mapper" targetProject="Tracker" />
+    <javaClientGenerator targetPackage="com.newput.mapper" targetProject="Tracker" type="XMLMAPPER" />
     <table schema="time_tracker" tableName="employee" >
       <!-- <columnOverride column="???" property="???" /> -->
     </table>

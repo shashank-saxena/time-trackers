@@ -16,7 +16,7 @@ import org.springframework.stereotype.Controller;
 import com.newput.domain.Employee;
 import com.newput.service.EmpService;
 import com.newput.service.VerificationMailSend;
-import com.newput.service.ReqResParser;
+import com.newput.service.JsonResService;
 
 /**
  * Description : Use as a controller class to pass control on the services
@@ -29,7 +29,7 @@ import com.newput.service.ReqResParser;
 public class EmpController {
 
 	@Autowired
-	private ReqResParser reqResParse;
+	private JsonResService jsonResService;
 
 	@Autowired
 	private EmpService empService;
@@ -44,31 +44,41 @@ public class EmpController {
 	 * Method - GET Description - Use for creation and parsing of a json
 	 * 
 	 * @return json object
-	 *         e.g.{"id":null,"firstName":"user","lastName":"tracker","email":
-	 *         "user@newput.com","dob":1444219564605,"doj":1444219564605,
-	 *         "address":"indore","contact":"1234567890","gender":"m","password"
-	 *         :"xyz","status":true,"passwordVerification":true,"role":
-	 *         "employee","created":10092015,"updated":10102015,"timeZone":5.5}
+	 *         e.g.{"response":{"data":{"lastName":"kulmi","address":"indore",
+	 *         "role":"employee","gender":"m","created":10092015,"pwd_verify":
+	 *         true,"time_zone":5.5,"firstName":"rahul","password":"xyz","dob":
+	 *         1444283837170,"contact":"9907614646","updated":10102015,"email":
+	 *         "rahul@newput.com","doj":1444283837170,"status":true},"success":
+	 *         "true","rcode":"null","error":"null"}}
 	 * @throws ParseException
 	 */
 	@Path("/get")
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
-	public Employee getIt() throws ParseException {
-		JSONObject obj = reqResParse.createRegistrationJson();
-		reqResParse.setRegistrationJson(obj);
-		return emp;
+	public JSONObject getIt() throws ParseException {
+		JSONObject obj = jsonResService.createRegistrationJson();
+		jsonResService.setSuccess("true");
+		jsonResService.setData(obj);
+		jsonResService.setRcode("null");
+		jsonResService.setError("null");
+		jsonResService.setRegistrationJson(obj);
+		jsonResService.responseSender();
+		System.out.println("created json response ::" + jsonResService.responseSender());
+		return jsonResService.responseSender();
 	}
 
 	/**
-	 * @POST
-	 * Description-Use to add new user into the system and send the validation email to the registered mail id
-	 * {@link VerificationMailSend}
+	 * @POST Description-Use to add new user into the system and send the
+	 *       validation email to the registered mail id
+	 *       {@link VerificationMailSend}
 	 */
 	@Path("/add")
 	@GET
 	@Produces(MediaType.TEXT_HTML)
 	public void addUser() {
+		String token = emailSend.generateRandomString();
+		System.out.println("token value : " + token);
+		emp.setvToken(token);
 		empService.addUser(emp);
 		emailSend.sendMail();
 	}

@@ -34,7 +34,7 @@ public class VerificationMailSend {
 		email.setTo(emp.getEmail());
 		email.setSubject("Confirmation Mail");
 		email.setText("Welcome, You are successfully register Please click here http://tracker/login?a="
-				+ generateRandomString());
+				+ emp.getvToken());
 		mailSender.send(email);
 	}
 
