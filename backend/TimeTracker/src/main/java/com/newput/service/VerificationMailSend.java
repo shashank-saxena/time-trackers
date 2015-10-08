@@ -12,7 +12,8 @@ import com.newput.domain.Employee;
 /**
  * {@link}
  * 
- * @author Newput Description- Method use to send email to the registred mail id
+ * @author Newput 
+ * Description : Method use to send email to the registered mail id
  *         for the verification in this method mailSender variable is @Autowired
  *         with bean defined in the applicationContext.xml
  */
@@ -55,7 +56,7 @@ public class VerificationMailSend {
 	}
 
 	/**
-	 * Description- method call internally to add numeric value in verification token
+	 * Description : method call internally to add numeric value in verification token
 	 * @return
 	 */
 	private int getRandomNumber() {

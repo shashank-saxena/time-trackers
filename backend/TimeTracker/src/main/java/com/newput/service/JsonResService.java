@@ -15,7 +15,7 @@ import com.newput.domain.Employee;
 /**
  * 
  * @author Newput
- *Description- Use to create and parse the json object
+ * Description : Use to create and parse the json object
  */
 
 @Service
@@ -62,7 +62,7 @@ public class JsonResService {
 	}
 
 	/**
-	 * Description - Create a Json to send into the response of UI
+	 * Description : Create a Json to send into the response of UI
 	 * @return JSONObject
 	 */
 	@SuppressWarnings("unchecked")
@@ -89,7 +89,7 @@ public class JsonResService {
 	
 
 	/**
-	 * Description -  To parse the Json object and set into the employee bean
+	 * Description : To parse the Json object and set into the employee bean
 	 * @param obj_new
 	 * @throws ParseException
 	 */

@@ -9,7 +9,7 @@ import com.newput.mapper.EmployeeMapper;
 /**
  * 
  * @author Newput
- *Description-Use to send control to the mapper classes
+ * Description : Use to send control to the mapper classes
  */
 @Service
 public class EmpService {

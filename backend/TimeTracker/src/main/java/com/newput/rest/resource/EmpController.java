@@ -41,7 +41,8 @@ public class EmpController {
 	private VerificationMailSend emailSend;
 
 	/**
-	 * Method - GET Description - Use for creation and parsing of a json
+	 * Method - GET 
+	 * Description : Use for creation and parsing of a json
 	 * 
 	 * @return json object
 	 *         e.g.{"response":{"data":{"lastName":"kulmi","address":"indore",
@@ -68,7 +69,8 @@ public class EmpController {
 	}
 
 	/**
-	 * @POST Description-Use to add new user into the system and send the
+	 * @POST 
+	 * Description : Use to add new user into the system and send the
 	 *       validation email to the registered mail id
 	 *       {@link VerificationMailSend}
 	 */
