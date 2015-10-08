@@ -5,7 +5,7 @@ import java.util.Date;
 import java.util.HashMap;
 
 import org.json.simple.JSONObject;
-//import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -20,6 +20,7 @@ import com.newput.domain.Employee;
 
 @Service
 public class JsonResService {
+
 
 	@Autowired
 	private Employee emp;
@@ -60,6 +61,7 @@ public class JsonResService {
 	public void setData(JSONObject data) {
 		this.data = data;
 	}
+
 
 	/**
 	 * Description : Create a Json to send into the response of UI
@@ -114,6 +116,7 @@ public class JsonResService {
 		emp.setTimeZone((BigDecimal) obj_new.get("time_zone"));
 	}
 	
+
 
 	@SuppressWarnings("unchecked")
 	public JSONObject responseSender(){

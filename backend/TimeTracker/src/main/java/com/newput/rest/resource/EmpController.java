@@ -1,5 +1,7 @@
 package com.newput.rest.resource;
 
+import javax.ws.rs.FormParam;
+
 //import java.math.BigDecimal;
 //import java.util.Date;
 
@@ -74,17 +76,25 @@ public class EmpController {
 	 *       validation email to the registered mail id
 	 *       {@link VerificationMailSend}
 	 */
-	@Path("/add")
+	@Path("/register")
 	@GET
 	@Produces(MediaType.TEXT_HTML)
-	public void addUser() {
+
+	public void registerUser() {
 		String token = emailSend.generateRandomString();
 		System.out.println("token value : " + token);
 		emp.setvToken(token);
-		empService.addUser(emp);
-		emailSend.sendMail();
+//=======
+//	public void registerUser() {
+//
+//		empService.addUser(emp);
+//		emailSend.sendMail();
 	}
 
+	public void mailVerification(@FormParam("token") String token,@FormParam("emailId") String mailId) {
+		
+		
+	}
 	public void registration() {
 	}
 
@@ -108,4 +118,6 @@ public class EmpController {
 
 	public void emailValidation() {
 	}
+
+	
 }
