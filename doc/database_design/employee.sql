@@ -1,0 +1,23 @@
+CREATE TABLE `employee` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `first_name` varchar(45) NOT NULL,
+  `last_name` varchar(45) NOT NULL,
+  `email` varchar(45) NOT NULL,
+  `dob` date NOT NULL,
+  `doj` date NOT NULL,
+  `address` varchar(100) DEFAULT NULL,
+  `contact` varchar(40) NOT NULL,
+  `gender` char(1) NOT NULL,
+  `password` varchar(45) NOT NULL,
+  `status` tinyint(1) DEFAULT '1',
+  `password_verification` tinyint(1) DEFAULT '1',
+  `role` enum('employee','guest','admin') DEFAULT 'guest',
+  `created` bigint(20) DEFAULT NULL,
+  `updated` bigint(20) DEFAULT NULL,
+  `time_zone` decimal(5,1) DEFAULT '5.5',
+  `v_token` varchar(20) NOT NULL,
+  `p_token` varchar(20) DEFAULT NULL,
+  `p_expire_at` bigint(20) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `email_UNIQUE` (`email`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1 COMMENT='Contain personal details of employee.';

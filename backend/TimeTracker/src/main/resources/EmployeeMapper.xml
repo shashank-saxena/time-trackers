@@ -504,4 +504,20 @@
       p_expire_at = #{pExpireAt,jdbcType=BIGINT}
     where id = #{id,jdbcType=INTEGER}
   </update>
+  
+  <!-- user defined query -->
+  <select id="selectByEmailPassword" resultMap="BaseResultMap" parameterType="com.newput.domain.Employee">
+		select
+		<include refid="Base_Column_List" />
+		from employee
+		where
+		<if test="email != null">
+			email = #{email,jdbcType=VARCHAR}
+		</if>
+		and
+		<if test="password != null">
+			password = #{password,jdbcType=VARCHAR}
+		</if>		
+	</select>
+	
 </mapper>

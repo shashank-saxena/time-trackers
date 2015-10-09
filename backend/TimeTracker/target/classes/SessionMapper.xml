@@ -315,4 +315,19 @@
       updated = #{updated,jdbcType=BIGINT}
     where id = #{id,jdbcType=INTEGER}
   </update>
+  
+  
+  <!-- user defined query -->
+  <select id="selectByTokenKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from session
+    where token = #{token,jdbcType=VARCHAR}
+  </select>
+  <select id="selectByEmpPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from session
+    where emp_id = #{empId,jdbcType=INTEGER}
+  </select>
 </mapper>

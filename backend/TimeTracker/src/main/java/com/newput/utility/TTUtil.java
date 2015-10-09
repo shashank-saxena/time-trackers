@@ -13,7 +13,7 @@ import org.springframework.stereotype.Service;
 public class TTUtil {
 
 
-    public static String createSessionKey(Long id,String email) {
+    public String createSessionKey(Long id,String email) {
     	try {
 			return Base16Encoder.encode(MessageDigest.getInstance(
 					"MD5").digest(
