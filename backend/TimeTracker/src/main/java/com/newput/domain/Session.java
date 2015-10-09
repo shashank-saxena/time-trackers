@@ -2,6 +2,9 @@ package com.newput.domain;
 
 import java.io.Serializable;
 
+import org.springframework.stereotype.Service;
+
+@Service
 public class Session implements Serializable {
 
 	/**

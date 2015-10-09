@@ -1,5 +1,7 @@
 package com.newput.rest.resource;
 
+import java.util.HashMap;
+
 import javax.ws.rs.FormParam;
 
 //import java.math.BigDecimal;
@@ -14,11 +16,12 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.ParseException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-
+//
 import com.newput.domain.Employee;
 import com.newput.service.EmpService;
-import com.newput.service.VerificationMailSend;
-import com.newput.service.JsonResService;
+import com.newput.utility.JsonResService;
+import com.newput.utility.ReqParseService;
+import com.newput.utility.VerificationMailSend;
 
 /**
  * Description : Use as a controller class to pass control on the services
@@ -41,6 +44,9 @@ public class EmpController {
 
 	@Autowired
 	private VerificationMailSend emailSend;
+	
+	@Autowired
+	private ReqParseService reqParser;
 
 	/**
 	 * Method - GET 
@@ -60,7 +66,7 @@ public class EmpController {
 	@Produces(MediaType.APPLICATION_JSON)
 	public JSONObject getIt() throws ParseException {
 		JSONObject obj = jsonResService.createRegistrationJson();
-		jsonResService.setSuccess("true");
+		jsonResService.setSuccess(true);
 		jsonResService.setData(obj);
 		jsonResService.setRcode("null");
 		jsonResService.setError("null");
@@ -78,17 +84,18 @@ public class EmpController {
 	 */
 	@Path("/register")
 	@GET
-	@Produces(MediaType.TEXT_HTML)
-
-	public void registerUser() {
+	@Produces(MediaType.APPLICATION_JSON)
+	public JSONObject registerUser() {
+		
 		String token = emailSend.generateRandomString();
-		System.out.println("token value : " + token);
-		emp.setvToken(token);
-//=======
-//	public void registerUser() {
-//
-//		empService.addUser(emp);
-//		emailSend.sendMail();
+		String empl ="address=indore&contact=1234567890&dob=03-03-2015&doj=03-03-2015&email=rahul.kulmi@gmail.com&firstName=deepti&gender=F&lastName=modi&password=check2";
+		
+		HashMap<String, String> mapValue=reqParser.reqParser(empl);
+		reqParser.setEmployeeValue(mapValue, token);
+		empService.addUser(emp);
+		emailSend.sendMail();
+		
+		return jsonResService.responseSender();
 	}
 
 	public void mailVerification(@FormParam("token") String token,@FormParam("emailId") String mailId) {
