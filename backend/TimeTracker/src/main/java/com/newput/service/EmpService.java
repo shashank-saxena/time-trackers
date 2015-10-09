@@ -58,4 +58,26 @@ public class EmpService {
 		jsonResService.setRcode("null");
 		jsonResService.setSuccess(status);
 	}
+	
+	public void mailVerify(Employee employee) {
+		int i = 0;
+		boolean status = false;
+		String result = "You are not registred with the specified mail id";
+		System.out.println("in verify api");
+	    i=empMapper.selectByEmailId(employee);
+
+		if (i > 0) {
+			status = true;
+			employee.setStatus(status);
+			System.out.println("in true status");
+			empMapper.updateByEmail(employee);
+			result = "Your mailid is successfully verified";
+		}
+
+		//jsonResService.setDataValue("${registarationStatus}");
+		jsonResService.setDataValue(result);
+		jsonResService.setError("null");
+		jsonResService.setRcode("null");
+		jsonResService.setSuccess(status);
+	}
 }

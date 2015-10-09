@@ -3,9 +3,13 @@ package com.newput.rest.resource;
 import java.util.Date;
 import java.util.HashMap;
 
+<<<<<<< HEAD
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.FormParam;
+=======
+//import javax.ws.rs.FormParam;
+>>>>>>> e44a126... Verify mail and update flag
 
 
 //import java.math.BigDecimal;
@@ -98,6 +102,7 @@ public class EmpController {
 	@Path("/register")
 	@POST
 	@Produces(MediaType.APPLICATION_JSON)
+<<<<<<< HEAD
 	public JSONObject registerUser(@FormParam("firstName") String firstName, @FormParam("lastName") String lastName, 
 			@FormParam("email") String email, @FormParam("dob") String dob, @FormParam("doj") String doj, 
 			@FormParam("address") String address, @FormParam("contact") String contact, 
@@ -113,6 +118,18 @@ public class EmpController {
 		empService.addUser(emp);
 		emailSend.sendMail();		
 
+=======
+	public JSONObject registerUser() {
+		
+		String empl ="address=indore&contact=1234567890&dob=03-03-2015&doj=03-03-2015&email=rahul.kulmi@gmail.com&firstName=deepti&gender=F&lastName=modi&password=check2";
+		
+		String token = emailSend.generateRandomString();
+		HashMap<String, String> mapValue=reqParser.reqParser(empl);
+		reqParser.setEmployeeValue(mapValue, token);
+		empService.addUser(emp);
+		//emailSend.sendMail();
+		
+>>>>>>> e44a126... Verify mail and update flag
 		return jsonResService.responseSender();
 	}
 

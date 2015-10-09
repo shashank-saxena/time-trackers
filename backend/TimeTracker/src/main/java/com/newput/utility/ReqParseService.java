@@ -49,6 +49,7 @@ public class ReqParseService {
 			System.out.println("dob is : "+userDob);
 			System.out.println("doj is : "+userDoj);
 			
+<<<<<<< HEAD
 			emp.setDob(userDob);
 			emp.setDoj(userDoj);
 			emp.setAddress(address);
@@ -62,6 +63,28 @@ public class ReqParseService {
 			emp.setPasswordVerification(false);
 			emp.setRole("guest");			
 			emp.setCreated(getCurrentTime());	
+=======
+			long systime = new Date().getTime()/1000;
+			Boolean status =false;
+			emp.setvToken(token);
+			emp.setEmail(empValue.get("email"));
+			emp.setAddress(empValue.get("address"));
+			emp.setContact(empValue.get("contact"));
+			emp.setCreated(systime);
+			String dob = empValue.get("dob");
+			Date userDob = sdf.parse(dob);
+			emp.setDob(userDob);
+			String doj = empValue.get("doj");
+			Date userDoj = sdf.parse(doj);
+			emp.setDoj(userDoj);			
+			emp.setFirstName(empValue.get("firstName"));
+			emp.setGender(empValue.get("gender"));
+			emp.setLastName(empValue.get("lastName"));
+			String getPassword = util.md5(empValue.get("password"));
+			emp.setPassword(getPassword);// add encryption						
+			emp.setUpdated(systime);	
+			emp.setRole("guest");
+>>>>>>> e44a126... Verify mail and update flag
 			emp.setTimeZone(new BigDecimal("5.5"));
 			emp.setvToken(token);					
 		} catch (Exception e) {
