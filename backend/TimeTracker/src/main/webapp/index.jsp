@@ -5,5 +5,6 @@
     <p><a href="rest/employee/register">Add Employee</a>
     <p><a href="rest/employee/login">Login Employee</a>
     <p><a href="rest/employee/loginSession">Login From Session Token Employee</a>
+    <p><a href="rest/employee/verify">Verify email</a> 
 </body>
 </html>

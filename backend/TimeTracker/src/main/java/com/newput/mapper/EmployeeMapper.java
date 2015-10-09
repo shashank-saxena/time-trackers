@@ -81,4 +81,9 @@ public interface EmployeeMapper {
 	 * @return
 	 */
 	Employee selectByEmailPassword(Employee record);
+
+	int selectByEmailId(Employee record);
+	
+	void updateByEmail(Employee record);
+
 }

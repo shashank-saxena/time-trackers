@@ -20,7 +20,7 @@ public class EmpService {
 
 	@Autowired
 	private JsonResService jsonResService;
-
+	
 	public void addUser(Employee employee) {
 		int i = 0;
 		boolean status = false;
@@ -32,6 +32,28 @@ public class EmpService {
 	
 		//jsonResService.setDataValue(@Value("${registarationStatus}"));
 		jsonResService.setDataValue("you are successfully registered");
+		jsonResService.setError("null");
+		jsonResService.setRcode("null");
+		jsonResService.setSuccess(status);
+	}
+	
+	public void mailVerify(Employee employee) {
+		int i = 0;
+		boolean status = false;
+		String result = "You are not registred with the specified mail id";
+		System.out.println("in verify api");
+	    i=empMapper.selectByEmailId(employee);
+
+		if (i > 0) {
+			status = true;
+			employee.setStatus(status);
+			System.out.println("in true status");
+			empMapper.updateByEmail(employee);
+			result = "Your mailid is successfully verified";
+		}
+
+		//jsonResService.setDataValue("${registarationStatus}");
+		jsonResService.setDataValue(result);
 		jsonResService.setError("null");
 		jsonResService.setRcode("null");
 		jsonResService.setSuccess(status);

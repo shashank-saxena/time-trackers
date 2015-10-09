@@ -3,8 +3,10 @@ package com.newput.rest.resource;
 import java.util.Date;
 import java.util.HashMap;
 
+
 import javax.ws.rs.Consumes;
 import javax.ws.rs.FormParam;
+
 
 //import java.math.BigDecimal;
 //import java.util.Date;
@@ -99,8 +101,8 @@ public class EmpController {
 	public JSONObject registerUser(@FormParam("firstName") String firstName, @FormParam("lastName") String lastName, 
 			@FormParam("email") String email, @FormParam("dob") String dob, @FormParam("doj") String doj, 
 			@FormParam("address") String address, @FormParam("contact") String contact, 
-			@FormParam("gender") String gender, @FormParam("password") String password) {
-		
+			@FormParam("gender") String gender, @FormParam("password") String password) {		
+
 		String token = emailSend.generateRandomString();		
 		reqParser.setEmployeeValue(firstName, lastName, email, dob, doj, address, contact, gender, password, token);
 		System.out.println("here now");
@@ -110,12 +112,21 @@ public class EmpController {
 		
 		empService.addUser(emp);
 		emailSend.sendMail();		
+
 		return jsonResService.responseSender();
 	}
 
-	public void mailVerification(@FormParam("token") String token,@FormParam("emailId") String mailId) {
+	@Path("/verify")
+	@GET
+	@Produces(MediaType.APPLICATION_JSON)
+	public JSONObject mailVerification() {
+//		@FormParam("token") String token,@FormParam("emailId") String mailId
+		String empl ="token=UD1N3AMP&email=rahul.kulmi@gmail.com";
 		
-		
+		HashMap<String, String> mapValue=reqParser.reqParser(empl);
+		reqParser.setEmployeeValue(mapValue, mapValue.get("token"));
+		empService.mailVerify(emp);
+		return jsonResService.responseSender();
 	}
 	
 	/*

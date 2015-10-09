@@ -520,4 +520,25 @@
 		</if>		
 	</select>
 	
+	<select id="selectByEmailId" parameterType="com.newput.domain.Employee" resultType="java.lang.Integer">
+		select count(1) from employee
+		where
+	    <if test="email != null">
+			email = #{email,jdbcType=VARCHAR}
+	    </if>
+			and
+	    <if test="vToken != null">
+			v_token = #{vToken,jdbcType=VARCHAR}
+	    </if>
+	 </select>
+
+	<update id="updateByEmail" parameterType="com.newput.domain.Employee">
+
+		update employee
+		set
+		status = #{status,jdbcType=BIT}
+		where email = #{email,jdbcType=VARCHAR} and v_token = 
+		#{vToken,jdbcType=VARCHAR}
+	</update>
+	
 </mapper>

@@ -45,9 +45,7 @@ public class ReqParseService {
 			emp.setLastName(lastName);			
 			emp.setEmail(email);			
 			
-			Date userDob = sdf.parse(dob);
-			Date userDoj = sdf.parse(doj);
-			
+		
 			System.out.println("dob is : "+userDob);
 			System.out.println("doj is : "+userDoj);
 			
