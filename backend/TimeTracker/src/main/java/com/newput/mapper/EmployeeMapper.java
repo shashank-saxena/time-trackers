@@ -73,4 +73,12 @@ public interface EmployeeMapper {
 	 * @mbggenerated  Thu Oct 08 11:59:16 IST 2015
 	 */
 	int updateByPrimaryKey(Employee record);
+	
+	
+	/**
+	 * user defined mapper. This method corresponds to the database table employee
+	 * @param record
+	 * @return
+	 */
+	Employee selectByEmailPassword(Employee record);
 }

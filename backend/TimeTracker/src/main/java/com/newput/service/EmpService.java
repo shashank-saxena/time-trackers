@@ -1,6 +1,7 @@
 package com.newput.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import com.newput.domain.Employee;
@@ -28,9 +29,9 @@ public class EmpService {
 		if (i > 0) {
 			status = true;
 		}
-
-		jsonResService.setDataValue("${registarationStatus}");
-		//jsonResService.setDataValue("you are successfully registered");
+	
+		//jsonResService.setDataValue(@Value("${registarationStatus}"));
+		jsonResService.setDataValue("you are successfully registered");
 		jsonResService.setError("null");
 		jsonResService.setRcode("null");
 		jsonResService.setSuccess(status);

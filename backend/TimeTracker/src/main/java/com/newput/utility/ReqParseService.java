@@ -31,55 +31,47 @@ public class ReqParseService {
 	private DateSheet dateSheet;
 	
 	@Autowired
-	private TTUtil util;
+	private TTUtil util;	
 
-	public HashMap<String, String> reqParser(String req) {
-		HashMap<String, String> request = new HashMap<>();
-		StringTokenizer st = new StringTokenizer(req, "&");
-		while (st.hasMoreTokens()) {
-			String token = st.nextToken();
-			int i = token.indexOf("=");
-			String key = token.substring(0, i);
-			String value = token.substring(i + 1);
-			request.put(key, value);
-		}
-		return request;
+	public Long getCurrentTime(){
+		return System.currentTimeMillis()/1000;
 	}
-
-	public void setEmployeeValue(HashMap<String, String> empValue, String token) {
-		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-mm-dd");
-
-		try {
+	
+	public void setEmployeeValue(String firstName, String lastName, String email, String dob, String doj,
+			String address, String contact, String gender, String password, String token) {
+		SimpleDateFormat sdf = new SimpleDateFormat("dd-mm-yyyy");
+		try {	//yyyy-mm-dd
+			emp.setFirstName(firstName);
+			emp.setLastName(lastName);			
+			emp.setEmail(email);			
 			
-			long systime = new Date().getTime()/1000;
-			Boolean status =false;
-			emp.setAddress(empValue.get("address"));
-			emp.setContact(empValue.get("contact"));
-			emp.setCreated(systime);
-			String dob = empValue.get("dob");
 			Date userDob = sdf.parse(dob);
-			emp.setDob(userDob);
-			String doj = empValue.get("doj");
 			Date userDoj = sdf.parse(doj);
-			emp.setDoj(userDoj);
-			emp.setEmail(empValue.get("email"));
-			emp.setFirstName(empValue.get("firstName"));
-			emp.setGender(empValue.get("gender"));
-			emp.setLastName(empValue.get("lastName"));
-			String getPassword = util.md5(empValue.get("password"));
-			emp.setPassword(getPassword);// add encryption
-			emp.setvToken(token);			
-			emp.setUpdated(systime);	
-			emp.setRole("guest");
-			emp.setTimeZone(new BigDecimal("5.5"));
-			emp.setStatus(status);
-			emp.setPasswordVerification(status);
 			
+			System.out.println("dob is : "+userDob);
+			System.out.println("doj is : "+userDoj);
+			
+			emp.setDob(userDob);
+			emp.setDoj(userDoj);
+			emp.setAddress(address);
+			emp.setContact(contact);
+			emp.setGender(gender);
+			
+			String getPassword = util.md5(password);
+			emp.setPassword(getPassword);// add encryption
+						
+			emp.setStatus(false);
+			emp.setPasswordVerification(false);
+			emp.setRole("guest");			
+			emp.setCreated(getCurrentTime());	
+			emp.setTimeZone(new BigDecimal("5.5"));
+			emp.setvToken(token);					
 		} catch (Exception e) {
 			e.getMessage();
 		}
 
 	}
+	
 	
 	public void setVerificationKey(boolean p_status,String pToken,String role){
 		long systime = new Date().getTime()/1000;
@@ -89,16 +81,17 @@ public class ReqParseService {
 		emp.setRole(role);
 	}
 
-	public void setSessionValue(HashMap<String, String> empValue, int emp_id, String emp_name, String token) {
+	public void setSessionValue(HashMap<String, String> empValue) {
 		try {
-			long systime = new Date().getTime()/1000;
-			session.setCreated(systime);
-			session.setEmpId(emp_id);
-			session.setEmpName(emp_name);
-			session.setExpiresWhen(systime + 3600);
-			session.setToken(token);
-			session.setUpdated(systime);
-
+			session.setToken(empValue.get("token"));			
+			session.setEmpId(Integer.parseInt(empValue.get("emp_id")));
+			session.setEmpName(empValue.get("emp_name"));
+			
+		
+			//long systime = new Date().getTime()/1000;
+			//session.setCreated(systime);
+			//session.setExpiresWhen(systime + 3600);			
+			//session.setUpdated(systime);
 		} catch (Exception e) {
 			e.getMessage();
 		}
