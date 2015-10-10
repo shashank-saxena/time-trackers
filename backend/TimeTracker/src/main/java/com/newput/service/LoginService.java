@@ -34,9 +34,7 @@ public class LoginService {
 		return System.currentTimeMillis()/1000;
 	}
 	
-	public void createSession(Employee employee) {
-		System.out.println("emial : "+employee.getEmail());
-		System.out.println("password : "+employee.getPassword());
+	public void createSession(Employee employee) {		
 		boolean status = false;
 		int i = 0;
 		employee.setPassword(util.md5(employee.getPassword()));
@@ -55,7 +53,7 @@ public class LoginService {
 					i = sessionMapper.insert(session);
 					if (i > 0) {
 						status = true;
-						jsonResService.setDataValue("Welcome User : "+emp.getFirstName());
+						jsonResService.setDataValue("Welcome User created : "+emp.getFirstName());
 					}else{
 						jsonResService.setDataValue("session token is not created");
 					}										
@@ -69,39 +67,38 @@ public class LoginService {
 				i = sessionMapper.updateByPrimaryKey(localSession);
 				if (i > 0) {
 					status = true;
-					jsonResService.setDataValue("Welcome User : "+emp.getFirstName());
+					jsonResService.setDataValue("Welcome User updated : "+emp.getFirstName());
 				}else{
 					jsonResService.setDataValue("token is not update");
 				}				
 			}						
 		}
-		if(status){
-			jsonResService.setError("null");
-			jsonResService.setRcode("null");
-		}else{
-			jsonResService.setError("invalid response");
-			jsonResService.setRcode("505");
-		}		
 		jsonResService.setSuccess(status);
+		if(status){
+			jsonResService.setRcode("null");
+			jsonResService.setError("null");			
+		}else{
+			jsonResService.setRcode("505");
+			jsonResService.setError("invalid response");			
+		}		
 	}
 
 	public void sessionManagement(Session session) {
-		System.out.println("token : "+session.getToken());
 		boolean status = false;
 		int i = 0;
 		Session localSession = sessionMapper.selectByTokenKey(session.getToken());
 		if(localSession == null){
 			jsonResService.setDataValue("token not found");
 		}else{
-			Long l1 = localSession.getExpiresWhen();
-			Long l2 = getCurrentTime();
-			if(l1>l2){
+			Long expireTime = localSession.getExpiresWhen();
+			Long currentTime = getCurrentTime();
+			if(expireTime>currentTime){
 				localSession.setUpdated(getCurrentTime());
 				localSession.setExpiresWhen(getCurrentTime()+60);
 				i = sessionMapper.updateByPrimaryKey(localSession);	
 				if (i > 0) {
 					status = true;
-					jsonResService.setDataValue("Welcome User : "+localSession.getEmpName());
+					jsonResService.setDataValue("Welcome User through token: "+localSession.getEmpName());
 				}else{
 					jsonResService.setDataValue("token is not update");
 				}
@@ -109,13 +106,13 @@ public class LoginService {
 				jsonResService.setDataValue("token is expired please login again");		
 			}
 		}
-		if(status){
-			jsonResService.setError("null");
-			jsonResService.setRcode("null");
-		}else{
-			jsonResService.setError("invalid response");
-			jsonResService.setRcode("505");
-		}		
 		jsonResService.setSuccess(status);
+		if(status){
+			jsonResService.setRcode("null");
+			jsonResService.setError("null");			
+		}else{
+			jsonResService.setRcode("505");
+			jsonResService.setError("invalid response");			
+		}
 	}
 }
