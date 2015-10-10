@@ -4,7 +4,6 @@ import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.StringTokenizer;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -39,18 +38,16 @@ public class ReqParseService {
 	
 	public void setEmployeeValue(String firstName, String lastName, String email, String dob, String doj,
 			String address, String contact, String gender, String password, String token) {
-		SimpleDateFormat sdf = new SimpleDateFormat("dd-mm-yyyy");
-		try {	//yyyy-mm-dd
+		SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
+		try {
 			emp.setFirstName(firstName);
 			emp.setLastName(lastName);			
 			emp.setEmail(email);			
 			
 			Date userDob = sdf.parse(dob);
-			Date userDoj = sdf.parse(doj);
-			
-			System.out.println("dob is : "+userDob);
-			System.out.println("doj is : "+userDoj);
-			
+			Date userDoj = sdf.parse(doj);			
+			//System.out.println("dob is : "+userDob);
+			//System.out.println("doj is : "+userDoj);			 
 			emp.setDob(userDob);
 			emp.setDoj(userDoj);
 			emp.setAddress(address);
@@ -69,7 +66,6 @@ public class ReqParseService {
 		} catch (Exception e) {
 			e.getMessage();
 		}
-
 	}
 	
 	
@@ -81,17 +77,13 @@ public class ReqParseService {
 		emp.setRole(role);
 	}
 
-	public void setSessionValue(HashMap<String, String> empValue) {
+	public void setSessionValue(String email, String password, String token) {
 		try {
-			session.setToken(empValue.get("token"));			
-			session.setEmpId(Integer.parseInt(empValue.get("emp_id")));
-			session.setEmpName(empValue.get("emp_name"));
-			
-		
-			//long systime = new Date().getTime()/1000;
-			//session.setCreated(systime);
-			//session.setExpiresWhen(systime + 3600);			
-			//session.setUpdated(systime);
+			emp.setEmail(email);
+			emp.setPassword(password);
+			session.setToken(token);			
+//			session.setEmpId(Integer.parseInt(empValue.get("emp_id")));
+//			session.setEmpName(empValue.get("emp_name"));			
 		} catch (Exception e) {
 			e.getMessage();
 		}
