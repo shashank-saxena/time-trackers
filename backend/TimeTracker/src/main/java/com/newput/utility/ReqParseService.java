@@ -13,7 +13,6 @@ import com.newput.domain.Employee;
 import com.newput.domain.Session;
 import com.newput.domain.TimeSheet;
 
-
 @Service
 public class ReqParseService {
 
@@ -22,30 +21,31 @@ public class ReqParseService {
 
 	@Autowired
 	private Session session;
-	
+
 	@Autowired
 	private TimeSheet timeSheet;
-	
+
 	@Autowired
 	private DateSheet dateSheet;
-	
-	@Autowired
-	private TTUtil util;	
 
-	public Long getCurrentTime(){
-		return System.currentTimeMillis()/1000;
+	@Autowired
+	private TTUtil util;
+
+	public Long getCurrentTime() {
+		return System.currentTimeMillis() / 1000;
 	}
-	
+
 	public void setEmployeeValue(String firstName, String lastName, String email, String dob, String doj,
 			String address, String contact, String gender, String password, String token) {
 		SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
 		try {
 			emp.setFirstName(firstName);
-			emp.setLastName(lastName);			
-			emp.setEmail(email);			
-			
+			emp.setLastName(lastName);
+			emp.setEmail(email);
+
 			Date userDob = sdf.parse(dob);
-			Date userDoj = sdf.parse(doj);			
+			Date userDoj = sdf.parse(doj);
+		
 			//System.out.println("dob is : "+userDob);
 			//System.out.println("doj is : "+userDoj);			 
 			emp.setDob(userDob);
@@ -53,26 +53,25 @@ public class ReqParseService {
 			emp.setAddress(address);
 			emp.setContact(contact);
 			emp.setGender(gender);
-			
+
 			String getPassword = util.md5(password);
 			emp.setPassword(getPassword);// add encryption
-						
+
 			emp.setStatus(false);
 			emp.setPasswordVerification(false);
-			emp.setRole("guest");			
-			emp.setCreated(getCurrentTime());	
+			emp.setRole("guest");
+			emp.setCreated(getCurrentTime());
 			emp.setTimeZone(new BigDecimal("5.5"));
-			emp.setvToken(token);					
+			emp.setvToken(token);
 		} catch (Exception e) {
 			e.getMessage();
 		}
 	}
-	
-	
-	public void setVerificationKey(boolean p_status,String pToken,String role){
-		long systime = new Date().getTime()/1000;
+
+	public void setVerificationKey(boolean p_status, String pToken, String role) {
+		long systime = new Date().getTime() / 1000;
 		emp.setPasswordVerification(p_status);
-		emp.setpExpireAt(systime+86400);
+		emp.setpExpireAt(systime + 86400);
 		emp.setpToken(pToken);
 		emp.setRole(role);
 	}
@@ -82,16 +81,20 @@ public class ReqParseService {
 			emp.setEmail(email);
 			emp.setPassword(password);
 			session.setToken(token);			
-//			session.setEmpId(Integer.parseInt(empValue.get("emp_id")));
-//			session.setEmpName(empValue.get("emp_name"));			
 		} catch (Exception e) {
 			e.getMessage();
 		}
 	}
-	
+
+	public void setValidationValue(String email, String token) {
+		emp.setEmail(email);
+		emp.setvToken(token);
+		emp.setUpdated(getCurrentTime());
+	}
+
 	public void setTimeSheetValue(HashMap<String, String> empValue, int emp_id) {
 		try {
-			long systime = new Date().getTime()/1000;
+			long systime = getCurrentTime();
 			timeSheet.setCreated(systime);
 			timeSheet.setEmpId(emp_id);
 			timeSheet.setChunkId(Integer.parseInt(empValue.get("chunk_id")));
@@ -105,11 +108,10 @@ public class ReqParseService {
 		}
 
 	}
-	
-	
+
 	public void setDateSheetValue(HashMap<String, String> empValue, int emp_id) {
 		try {
-			long systime = new Date().getTime()/1000;
+			long systime = new Date().getTime() / 1000;
 			dateSheet.setCreated(systime);
 			dateSheet.setEmpId(emp_id);
 			dateSheet.setWorkDate(Long.parseLong(empValue.get("workDate")));

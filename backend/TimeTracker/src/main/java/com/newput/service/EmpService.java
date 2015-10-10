@@ -37,4 +37,26 @@ public class EmpService {
 			jsonResService.setError("invalid response");			
 		}			
 	}
+
+	public void mailVerify(Employee employee) {
+		int i = 0;
+		boolean status = false;
+		String result = "your id or token is not correct";
+		// System.out.println("values are
+		// ::"+employee.getEmail()+":"+employee.getvToken());
+		i = empMapper.selectByEmailId(employee);
+		System.out.println("no of employee :: " + i);
+		if (i > 0) {
+			status = true;
+			employee.setStatus(status);
+			empMapper.updateByEmail(employee);
+			result = "your mail id is successfully verified";
+		}
+
+		// jsonResService.setDataValue(@Value("${registarationStatus}"));
+		jsonResService.setDataValue(result);
+		jsonResService.setError("null");
+		jsonResService.setRcode("null");
+		jsonResService.setSuccess(status);
+	}
 }

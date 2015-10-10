@@ -37,13 +37,13 @@ public class EmpController {
 
 	@Autowired
 	private VerificationMailSend emailSend;
-	
+
 	@Autowired
 	private ReqParseService reqParser;
-	
+
 	@Autowired
 	private Session session;
-	
+
 	@Autowired
 	private LoginService loginService;
 
@@ -56,21 +56,42 @@ public class EmpController {
 	@Path("/register")
 	@POST
 	@Produces(MediaType.APPLICATION_JSON)
-	public JSONObject registerUser(@FormParam("firstName") String firstName, @FormParam("lastName") String lastName, 
-			@FormParam("email") String email, @FormParam("dob") String dob, @FormParam("doj") String doj, 
-			@FormParam("address") String address, @FormParam("contact") String contact, 
+	public JSONObject registerUser(@FormParam("firstName") String firstName, @FormParam("lastName") String lastName,
+			@FormParam("email") String email, @FormParam("dob") String dob, @FormParam("doj") String doj,
+			@FormParam("address") String address, @FormParam("contact") String contact,
 			@FormParam("gender") String gender, @FormParam("password") String password) {
-		
-		String token = emailSend.generateRandomString();		
+
+		String token = emailSend.generateRandomString();
 		reqParser.setEmployeeValue(firstName, lastName, email, dob, doj, address, contact, gender, password, token);
 		empService.addUser(emp);
-		emailSend.sendMail();		
+		emailSend.sendMail();
+		
 		return jsonResService.responseSender();
 	}
 
-	public void mailVerification(@FormParam("token") String token,@FormParam("emailId") String mailId) {
-		
-		
+
+	@Path("/verify")
+	@POST
+	@Produces(MediaType.APPLICATION_JSON)
+	public JSONObject mailVerification(@FormParam("email") String emailId, @FormParam("token") String token) {
+		if (emailId != null && !emailId.equalsIgnoreCase("")) {
+			if (token != null && !token.equalsIgnoreCase("")) {
+				reqParser.setValidationValue(emailId, token);
+				empService.mailVerify(emp);
+
+			} else {
+				jsonResService.setDataValue("token can not be blank");
+				jsonResService.setError("null");
+				jsonResService.setRcode("null");
+				jsonResService.setSuccess(false);
+			}
+		} else {
+			jsonResService.setDataValue("email id can not be blank");
+			jsonResService.setError("null");
+			jsonResService.setRcode("null");
+			jsonResService.setSuccess(false);
+		}
+		return jsonResService.responseSender();
 	}
 	
 	@Path("/login")
@@ -90,7 +111,7 @@ public class EmpController {
 		loginService.sessionManagement(session);		
 		return jsonResService.responseSender();
 	}
-	
+
 
 	public void forgotPwd() {
 	}
@@ -113,5 +134,4 @@ public class EmpController {
 	public void emailValidation() {
 	}
 
-	
 }
