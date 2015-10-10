@@ -74,6 +74,7 @@ public interface EmployeeMapper {
 	 */
 	int updateByPrimaryKey(Employee record);
 	
+<<<<<<< HEAD
 	
 	/**
 	 * user defined mapper. This method corresponds to the database table employee
@@ -81,4 +82,14 @@ public interface EmployeeMapper {
 	 * @return
 	 */
 	Employee selectByEmailPassword(Employee record);
+
+	int selectByEmailId(Employee record);
+	
+	void updateByEmail(Employee record);
+
+=======
+	int selectByEmailId(Employee record);
+	
+	void updateByEmail(Employee record);
+>>>>>>> e44a126... Verify mail and update flag
 }
