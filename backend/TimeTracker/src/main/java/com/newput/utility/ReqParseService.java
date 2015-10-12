@@ -39,18 +39,20 @@ public class ReqParseService {
 			String address, String contact, String gender, String password, String token) {
 		SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
 		try {
+			firstName = util.getAlphaNum(firstName);
+			lastName = util.getAlphaNum(lastName);
+			contact = util.getIntNum(contact);
 			emp.setFirstName(firstName);
 			emp.setLastName(lastName);
 			emp.setEmail(email);
 
 			Date userDob = sdf.parse(dob);
 			Date userDoj = sdf.parse(doj);
-		
-			//System.out.println("dob is : "+userDob);
-			//System.out.println("doj is : "+userDoj);			 
+
 			emp.setDob(userDob);
 			emp.setDoj(userDoj);
 			emp.setAddress(address);
+			contact = util.getIntNum(contact);
 			emp.setContact(contact);
 			emp.setGender(gender);
 
@@ -80,7 +82,7 @@ public class ReqParseService {
 		try {
 			emp.setEmail(email);
 			emp.setPassword(password);
-			session.setToken(token);			
+			session.setToken(token);
 		} catch (Exception e) {
 			e.getMessage();
 		}

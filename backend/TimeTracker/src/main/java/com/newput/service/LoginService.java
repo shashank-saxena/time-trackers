@@ -1,12 +1,16 @@
 package com.newput.service;
 
+import java.util.List;
+
 //import java.util.Date;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.newput.domain.Employee;
+import com.newput.domain.EmployeeExample;
 import com.newput.domain.Session;
+import com.newput.domain.SessionExample;
 import com.newput.mapper.EmployeeMapper;
 import com.newput.mapper.SessionMapper;
 import com.newput.utility.JsonResService;
@@ -20,99 +24,92 @@ public class LoginService {
 
 	@Autowired
 	private EmployeeMapper empMapper;
-	
+
 	@Autowired
 	private JsonResService jsonResService;
-	
+
 	@Autowired
 	private Session session;
-	
+
 	@Autowired
 	private TTUtil util;
 
-	public Long getCurrentTime(){
-		return System.currentTimeMillis()/1000;
+	public Long getCurrentTime() {
+		return System.currentTimeMillis() / 1000;
 	}
-	
-	public void createSession(Employee employee) {		
-		boolean status = false;
+
+	public void createSession(Employee employee) {
 		int i = 0;
 		employee.setPassword(util.md5(employee.getPassword()));
-		Employee emp = empMapper.selectByEmailPassword(employee);
-		if(emp == null){
-			jsonResService.setDataValue("invalid user");			
-		}else{
-			Session localSession = sessionMapper.selectByEmpPrimaryKey(emp.getId());
-			if(localSession == null){
-				if(emp.getStatus()){
+		EmployeeExample example = new EmployeeExample();
+		example.createCriteria().andEmailEqualTo(employee.getEmail()).andPasswordEqualTo(employee.getPassword());
+		List<Employee> employeeList = empMapper.selectByExample(example);
+		if (employeeList.isEmpty()) {
+			jsonResService.errorResponse("invalid user");
+		} else {
+			Employee emp = employeeList.get(0);
+			SessionExample sessionExample = new SessionExample();
+			sessionExample.createCriteria().andEmpIdEqualTo(emp.getId());
+			List<Session> sessionList = sessionMapper.selectByExample(sessionExample);
+			if (sessionList.isEmpty()) {
+				if (emp.getStatus()) {
 					session.setEmpId(emp.getId());
 					session.setEmpName(emp.getFirstName());
 					session.setToken(util.createSessionKey(getCurrentTime(), emp.getEmail()));
 					session.setCreated(getCurrentTime());
-					session.setExpiresWhen(getCurrentTime()+1800);
-					i = sessionMapper.insert(session);
+					session.setExpiresWhen(getCurrentTime() + 1800);
+					i = sessionMapper.insertSelective(session);
 					if (i > 0) {
-						status = true;
-						jsonResService.setDataValue("Welcome User created : "+emp.getFirstName());
-					}else{
-						jsonResService.setDataValue("session token is not created");
-					}										
-				}else{
-					jsonResService.setDataValue("email is not verified");	
+						jsonResService.setDataValue("Welcome User created : " + emp.getFirstName(), session.getToken());
+						jsonResService.successResponse();
+					} else {
+						jsonResService.errorResponse("session token is not created");
+					}
+				} else {
+					jsonResService.errorResponse("email is not verified");
 				}
-			}else{
+			} else {
+				Session localSession = sessionList.get(0);
 				localSession.setUpdated(getCurrentTime());
-				localSession.setExpiresWhen(getCurrentTime()+60);
+				localSession.setExpiresWhen(getCurrentTime() + 60);
 				localSession.setToken(util.createSessionKey(getCurrentTime(), emp.getEmail()));
 				i = sessionMapper.updateByPrimaryKey(localSession);
 				if (i > 0) {
-					status = true;
-					jsonResService.setDataValue("Welcome User updated : "+emp.getFirstName());
-				}else{
-					jsonResService.setDataValue("token is not update");
-				}				
-			}						
+					jsonResService.successResponse();
+					jsonResService.setDataValue("Welcome User updated : " + emp.getFirstName(),
+							localSession.getToken());
+				} else {
+					jsonResService.errorResponse("token is not update");
+				}
+			}
 		}
-		jsonResService.setSuccess(status);
-		if(status){
-			jsonResService.setRcode("null");
-			jsonResService.setError("null");			
-		}else{
-			jsonResService.setRcode("505");
-			jsonResService.setError("invalid response");			
-		}		
 	}
 
 	public void sessionManagement(Session session) {
-		boolean status = false;
 		int i = 0;
-		Session localSession = sessionMapper.selectByTokenKey(session.getToken());
-		if(localSession == null){
-			jsonResService.setDataValue("token not found");
-		}else{
+		SessionExample sessionExample = new SessionExample();
+		sessionExample.createCriteria().andTokenEqualTo(session.getToken());
+		List<Session> sessionList = sessionMapper.selectByExample(sessionExample);
+		if (sessionList.isEmpty()) {
+			jsonResService.errorResponse("token not found");
+		} else {
+			Session localSession = sessionList.get(0);
 			Long expireTime = localSession.getExpiresWhen();
 			Long currentTime = getCurrentTime();
-			if(expireTime>currentTime){
+			if (expireTime > currentTime) {
 				localSession.setUpdated(getCurrentTime());
-				localSession.setExpiresWhen(getCurrentTime()+60);
-				i = sessionMapper.updateByPrimaryKey(localSession);	
+				localSession.setExpiresWhen(getCurrentTime() + 60);
+				i = sessionMapper.updateByPrimaryKey(localSession);
 				if (i > 0) {
-					status = true;
-					jsonResService.setDataValue("Welcome User through token: "+localSession.getEmpName());
-				}else{
-					jsonResService.setDataValue("token is not update");
+					jsonResService.successResponse();
+					jsonResService.setDataValue("Welcome User through token: " + localSession.getEmpName(),
+							localSession.getToken());
+				} else {
+					jsonResService.errorResponse("token is not update");
 				}
-			}else{
-				jsonResService.setDataValue("token is expired please login again");		
+			} else {
+				jsonResService.errorResponse("token is expired please login again");
 			}
-		}
-		jsonResService.setSuccess(status);
-		if(status){
-			jsonResService.setRcode("null");
-			jsonResService.setError("null");			
-		}else{
-			jsonResService.setRcode("505");
-			jsonResService.setError("invalid response");			
 		}
 	}
 }

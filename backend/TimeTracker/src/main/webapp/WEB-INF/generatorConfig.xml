@@ -1,18 +1,34 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE generatorConfiguration PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN" "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd" >
-<generatorConfiguration >
-  <classPathEntry location="F:\JARS\mysql-connector-java-5.0.8\mysql-connector-java-5.0.8\mysql-connector-java-5.0.8-bin.jar"/>
-  <context id="tracker" ><plugin type="org.mybatis.generator.plugins.SerializablePlugin" />
-    <jdbcConnection driverClass="com.mysql.jdbc.Driver" connectionURL="jdbc:mysql://localhost:3306/time_tracker" 
-    userId="root" password="root" />
-    <javaModelGenerator targetPackage="com.newput.domain" targetProject="Tracker" />
-    <sqlMapGenerator targetPackage="com.newput.mapper" targetProject="Tracker" />
-    <javaClientGenerator targetPackage="com.newput.mapper" targetProject="Tracker" type="XMLMAPPER" />
-    <table schema="time_tracker" tableName="employee" >
-      <!-- <columnOverride column="???" property="???" /> -->
-    </table>
-    <table tableName="date_sheet" />
-    <table tableName="session" />
-    <table tableName="time_sheet" />
-  </context>
+<generatorConfiguration>
+	<classPathEntry
+		location="H:\Deepti\Libraries\mysql-connector-java-5.0.8-bin.jar" />
+	<context id="tracker">
+		<plugin type="org.mybatis.generator.plugins.SerializablePlugin" />
+		<jdbcConnection driverClass="com.mysql.jdbc.Driver"
+			connectionURL="jdbc:mysql://localhost:3306/time_tracker" userId="root"
+			password="root" />
+		<javaModelGenerator targetPackage="com.newput.domain"
+			targetProject="Tracker" />
+		<sqlMapGenerator targetPackage="com.newput.mapper"
+			targetProject="Tracker" />
+		<javaClientGenerator targetPackage="com.newput.mapper"
+			targetProject="Tracker" type="XMLMAPPER" />
+		<table schema="time_tracker" tableName="employee">
+			<generatedKey column="id" sqlStatement="SELECT LAST_INSERT_ID()"
+				identity="true" type="post" />
+		</table>
+		<table tableName="date_sheet">
+			<generatedKey column="id" sqlStatement="SELECT LAST_INSERT_ID()"
+				identity="true" type="post" />
+		</table>
+		<table tableName="session">
+			<generatedKey column="id" sqlStatement="SELECT LAST_INSERT_ID()"
+				identity="true" type="post" />
+		</table>
+		<table tableName="time_sheet">
+			<generatedKey column="id" sqlStatement="SELECT LAST_INSERT_ID()"
+				identity="true" type="post" />
+		</table>
+	</context>
 </generatorConfiguration>
