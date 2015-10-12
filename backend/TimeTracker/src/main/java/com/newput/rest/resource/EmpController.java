@@ -8,12 +8,14 @@ import javax.ws.rs.core.MediaType;
 import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+
 import com.newput.domain.Employee;
 import com.newput.domain.Session;
 import com.newput.service.EmpService;
 import com.newput.service.LoginService;
 import com.newput.utility.JsonResService;
 import com.newput.utility.ReqParseService;
+import com.newput.utility.TTUtil;
 import com.newput.utility.VerificationMailSend;
 
 /**
@@ -47,9 +49,11 @@ public class EmpController {
 	@Autowired
 	private LoginService loginService;
 
+	@Autowired
+	private TTUtil util;
+
 	/**
-	 * @POST 
-	 * Description : Use to add new user into the system and send the
+	 * @POST Description : Use to add new user into the system and send the
 	 *       validation email to the registered mail id
 	 *       {@link VerificationMailSend}
 	 */
@@ -64,11 +68,11 @@ public class EmpController {
 		String token = emailSend.generateRandomString();
 		reqParser.setEmployeeValue(firstName, lastName, email, dob, doj, address, contact, gender, password, token);
 		empService.addUser(emp);
-		emailSend.sendMail();
-		
+		if(jsonResService.isSuccess()){
+			emailSend.sendMail();			
+		}
 		return jsonResService.responseSender();
 	}
-
 
 	@Path("/verify")
 	@POST
@@ -78,40 +82,44 @@ public class EmpController {
 			if (token != null && !token.equalsIgnoreCase("")) {
 				reqParser.setValidationValue(emailId, token);
 				empService.mailVerify(emp);
-
 			} else {
-				jsonResService.setDataValue("token can not be blank");
-				jsonResService.setError("null");
-				jsonResService.setRcode("null");
-				jsonResService.setSuccess(false);
+				jsonResService.errorResponse("token can not be blank");
 			}
 		} else {
-			jsonResService.setDataValue("email id can not be blank");
-			jsonResService.setError("null");
-			jsonResService.setRcode("null");
-			jsonResService.setSuccess(false);
+			jsonResService.errorResponse("Mail id can not be null");
 		}
 		return jsonResService.responseSender();
 	}
-	
+
 	@Path("/login")
 	@POST
-	@Produces(MediaType.APPLICATION_JSON)	
-	public JSONObject login(@FormParam("email") String email, @FormParam("password") String password) {		
-		reqParser.setSessionValue(email, password, "");
-		loginService.createSession(emp);
-	return jsonResService.responseSender();
-	}
-	
-	@Path("/loginSession")
-	@POST
 	@Produces(MediaType.APPLICATION_JSON)
-	public JSONObject loginSession(@FormParam("token") String token){
-		reqParser.setSessionValue("", "", token);
-		loginService.sessionManagement(session);		
+	public JSONObject login(@FormParam("email") String email, @FormParam("password") String password) {
+		if (email != null && !email.equalsIgnoreCase("") && util.mailFormat(email)) {
+			if (password != null && !password.equalsIgnoreCase("")) {
+				reqParser.setSessionValue(email, password, "");
+				loginService.createSession(emp);
+			} else {
+				jsonResService.errorResponse("password can not be blank");
+			}
+		} else {
+			jsonResService.errorResponse("Mail id can not be null and in proper format");
+		}
 		return jsonResService.responseSender();
 	}
 
+	@Path("/loginSession")
+	@POST
+	@Produces(MediaType.APPLICATION_JSON)
+	public JSONObject loginSession(@FormParam("token") String token) {
+		if (token != null && !token.equalsIgnoreCase("")) {
+			reqParser.setSessionValue("", "", token);
+			loginService.sessionManagement(session);
+		} else {
+			jsonResService.errorResponse("token can not be blank");
+		}
+		return jsonResService.responseSender();
+	}
 
 	public void forgotPwd() {
 	}

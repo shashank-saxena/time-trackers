@@ -25,6 +25,7 @@ public class TTUtil {
 	}
 
 	public String md5(String str) {
+		if(str != null && !str.equalsIgnoreCase("")){
 		MessageDigest messageDigest = null;
 		try {
 			messageDigest = MessageDigest.getInstance("MD5");
@@ -34,13 +35,16 @@ public class TTUtil {
 		messageDigest.reset();
 		messageDigest.update(str.getBytes());
 		return new String(Hex.encodeHex(messageDigest.digest()));
+		}else{
+			return "";
+		}
 	}
 
-	public static String getAlphaNum(String s) {
+	public String getAlphaNum(String s) {
 		if (s == null) {
 			return "-";
 		} else {
-			return s.replaceAll("[^A-Za-z0-9]+", "-");
+			return s.replaceAll("[^A-Za-z]+", "");
 		}
 	}
 
@@ -63,7 +67,7 @@ public class TTUtil {
 		if (contact.matches("\\d{10}")) {
 			return contact;
 		} else {
-			return "invalid number";
+			return "";
 		}
 	}
 }

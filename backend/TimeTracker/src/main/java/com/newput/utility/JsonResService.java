@@ -19,7 +19,7 @@ public class JsonResService {
 	private String rcode;
 	private String error;
 	private JSONObject data;
-	
+
 	public boolean isSuccess() {
 		return success;
 	}
@@ -50,7 +50,7 @@ public class JsonResService {
 
 	public void setData(JSONObject data) {
 		this.data = data;
-	}	
+	}
 
 	/**
 	 * Description : Create a Json to send into the response of UI
@@ -60,6 +60,7 @@ public class JsonResService {
 	@SuppressWarnings("unchecked")
 	public JSONObject createEmployeeJson(Employee emp) {
 		JSONObject obj = new JSONObject();
+		obj.put("id", emp.getId());
 		obj.put("firstName", emp.getFirstName());
 		obj.put("lastName", emp.getLastName());
 		obj.put("email", emp.getEmail());
@@ -69,7 +70,7 @@ public class JsonResService {
 		obj.put("contact", emp.getContact());
 		obj.put("gender", emp.getGender());
 		return obj;
-	}	
+	}
 
 	@SuppressWarnings("unchecked")
 	public JSONObject responseSender() {
@@ -79,9 +80,12 @@ public class JsonResService {
 	}
 
 	@SuppressWarnings("unchecked")
-	public JSONObject setDataValue(String str) {
+	public JSONObject setDataValue(String str, String token) {
 		JSONObject obj = new JSONObject();
-		obj.put("", str);		
+		obj.put("msg", str);
+		if (token != null && !token.equalsIgnoreCase("")) {
+			obj.put("token", token);
+		}
 		setData(obj);
 		return obj;
 	}
@@ -93,6 +97,19 @@ public class JsonResService {
 		map.put("rcode", getRcode());
 		map.put("error", getError());
 		return map;
+	}
+
+	public void errorResponse(String response) {
+		setDataValue(null,null);
+		setError(response);
+		setRcode("505");
+		setSuccess(false);
+	}
+
+	public void successResponse() {
+		setError(null);
+		setRcode(null);
+		setSuccess(true);
 	}
 
 }
