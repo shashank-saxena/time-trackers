@@ -83,15 +83,16 @@ public class LoginService {
 				}
 			}
 		}
-	}
-
-	public void sessionManagement(Session session) {
+	}	
+	
+	public boolean loginSessionFilter(String token) {
 		int i = 0;
 		SessionExample sessionExample = new SessionExample();
-		sessionExample.createCriteria().andTokenEqualTo(session.getToken());
+		sessionExample.createCriteria().andTokenEqualTo(token);
 		List<Session> sessionList = sessionMapper.selectByExample(sessionExample);
 		if (sessionList.isEmpty()) {
 			jsonResService.errorResponse("token not found");
+			return false;
 		} else {
 			Session localSession = sessionList.get(0);
 			Long expireTime = localSession.getExpiresWhen();
@@ -104,12 +105,15 @@ public class LoginService {
 					jsonResService.successResponse();
 					jsonResService.setDataValue("Welcome User through token: " + localSession.getEmpName(),
 							localSession.getToken());
+					return true;
 				} else {
 					jsonResService.errorResponse("token is not update");
-				}
+					return false;
+				}				
 			} else {
 				jsonResService.errorResponse("token is expired please login again");
+				return false;
 			}
 		}
-	}
+	}	
 }

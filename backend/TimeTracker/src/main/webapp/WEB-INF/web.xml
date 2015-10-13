@@ -19,11 +19,19 @@
 		<init-param>
 			<param-name>jersey.config.server.provider.packages</param-name>
 			<param-value>com.newput.rest.resource</param-value>
-		</init-param>		
+		</init-param>
 		<load-on-startup>1</load-on-startup>
 	</servlet>
 	<servlet-mapping>
 		<servlet-name>Jersey Web Application</servlet-name>
 		<url-pattern>/rest/*</url-pattern>
 	</servlet-mapping>
+	<filter>
+		<filter-name>SessionFilter</filter-name>
+		<filter-class>com.newput.service.SessionFilter</filter-class>		
+	</filter>
+	<filter-mapping>
+		<filter-name>SessionFilter</filter-name>
+		<url-pattern>/rest/employee/*</url-pattern>
+	</filter-mapping>
 </web-app>

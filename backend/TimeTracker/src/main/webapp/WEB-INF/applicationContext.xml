@@ -12,8 +12,8 @@
 	<context:component-scan base-package="com.newput.rest.resource" />
 	<context:component-scan base-package="com.newput.utility" />
 	<context:annotation-config />
-	<context:property-placeholder location="classpath:status.properties"/>
-	
+	<context:property-placeholder location="classpath:status.properties" />
+
 	<tx:annotation-driven transaction-manager="transactionManager" />
 	<!-- <context:property-placeholder location="classpath:status.properties" 
 		/> -->
@@ -56,14 +56,9 @@
 				<prop key="mail.smtp.port">587</prop>
 			</props>
 		</property>
-	</bean>
+	</bean>	
 
-	<!-- <bean
-		class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
-		<property name="locations">
-			<list>
-				<value>classpath:status.properties</value>
-			</list>
-		</property>
-	</bean> -->
+	<!-- <bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer"> 
+		<property name="locations"> <list> <value>classpath:status.properties</value> 
+		</list> </property> </bean> -->
 </beans>
