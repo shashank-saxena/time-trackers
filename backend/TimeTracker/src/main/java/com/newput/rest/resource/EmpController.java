@@ -12,6 +12,7 @@ import org.springframework.stereotype.Controller;
 import com.newput.domain.Employee;
 import com.newput.service.EmpService;
 import com.newput.service.LoginService;
+import com.newput.service.TSchedualService;
 import com.newput.utility.JsonResService;
 import com.newput.utility.ReqParseService;
 import com.newput.utility.TTUtil;
@@ -26,6 +27,9 @@ import com.newput.utility.VerificationMailSend;
 @Controller
 @Path("/employee")
 public class EmpController {
+
+	@Autowired
+	private TSchedualService timeSchedual;
 
 	@Autowired
 	private JsonResService jsonResService;
@@ -64,8 +68,8 @@ public class EmpController {
 		String token = emailSend.generateRandomString();
 		reqParser.setEmployeeValue(firstName, lastName, email, dob, doj, address, contact, gender, password, token);
 		empService.addUser(emp);
-		if(jsonResService.isSuccess()){
-			emailSend.sendMail();			
+		if (jsonResService.isSuccess()) {
+			emailSend.sendMail();
 		}
 		return jsonResService.responseSender();
 	}
@@ -104,7 +108,36 @@ public class EmpController {
 		return jsonResService.responseSender();
 	}
 
-	public void forgotPwd() {
+	public void forgotPwd(@FormParam("email") String email) {
+
+	}
+
+	@Path("/timeEntry")
+	@POST
+	@Produces(MediaType.APPLICATION_JSON)
+	public JSONObject timeEntry(@FormParam("lunchIn") String lunchIn, @FormParam("in") String in,
+			@FormParam("out") String out, @FormParam("workDate") String workdate,
+			@FormParam("lunchOut") String lunchOut, @FormParam("nightIn") String nightIn,
+			@FormParam("nightOut") String nightOut, @FormParam("workDesc") String workDesc,
+			@FormParam("empId") String emp_id) {
+		int id = Integer.parseInt(emp_id);
+		if (workdate != null && !workdate.equalsIgnoreCase("")) {
+			if (emp_id != null && !emp_id.equalsIgnoreCase("")) {
+
+				timeSchedual.timeSheetValue(lunchIn, in, out, workdate, lunchOut, nightIn, nightOut, id);
+				if (workDesc != null && !workDesc.equalsIgnoreCase("")) {
+					reqParser.setDateSheetValue(workDesc, workdate, id);
+					timeSchedual.dateSheetValue();
+				}
+				timeSchedual.clearMap();
+				// jsonResService.setTimeSheetValue(workdate,in,out,id,empId);
+			} else {
+				jsonResService.errorResponse("emp_id can not be null");
+			}
+		} else {
+			jsonResService.errorResponse("Date can not be null");
+		}
+		return jsonResService.responseSender();
 	}
 
 	public void email() {

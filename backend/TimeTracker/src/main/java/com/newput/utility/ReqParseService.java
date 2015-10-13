@@ -3,7 +3,6 @@ package com.newput.utility;
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.HashMap;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -94,35 +93,38 @@ public class ReqParseService {
 		emp.setUpdated(getCurrentTime());
 	}
 
-	public void setTimeSheetValue(HashMap<String, String> empValue, int emp_id) {
+	public TimeSheet setTimeSheetValue(String workDate, String in, String out, String chunkId, int emp_id) {
+		SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
 		try {
-			long systime = getCurrentTime();
-			timeSheet.setCreated(systime);
+			Date wrkdate = sdf.parse(workDate);
+			long systime = wrkdate.getTime() / 1000;
+			timeSheet.setCreated(getCurrentTime());
+			timeSheet.setWorkDate(systime);
 			timeSheet.setEmpId(emp_id);
-			timeSheet.setChunkId(Integer.parseInt(empValue.get("chunk_id")));
-			timeSheet.setTimeIn(Long.parseLong(empValue.get("timeIn")));
-			timeSheet.setTimeOut(Long.parseLong(empValue.get("timeout")));
-			timeSheet.setWorkDate(Long.parseLong(empValue.get("workDate")));
-			timeSheet.setUpdated(systime);
-
+			timeSheet.setChunkId(Integer.parseInt(chunkId));
+			if (in != null && !in.equalsIgnoreCase("")) {
+				timeSheet.setTimeIn(Long.parseLong(in));
+			}
+			timeSheet.setTimeOut(Long.parseLong(out));
 		} catch (Exception e) {
 			e.getMessage();
 		}
-
+		return timeSheet;
 	}
 
-	public void setDateSheetValue(HashMap<String, String> empValue, int emp_id) {
+	public void setDateSheetValue(String desc, String workdate, int emp_id) {
+		SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
 		try {
-			long systime = new Date().getTime() / 1000;
-			dateSheet.setCreated(systime);
+			Date currntdate = sdf.parse(workdate);
+			long systime = currntdate.getTime() / 1000;
+			dateSheet.setCreated(getCurrentTime());
 			dateSheet.setEmpId(emp_id);
-			dateSheet.setWorkDate(Long.parseLong(empValue.get("workDate")));
-			dateSheet.setWorkDesc(empValue.get("workDesc"));
-			dateSheet.setUpdated(systime);
-
+			dateSheet.setWorkDate(systime);
+			dateSheet.setWorkDesc(desc);
 		} catch (Exception e) {
 			e.getMessage();
 		}
 
 	}
+
 }
