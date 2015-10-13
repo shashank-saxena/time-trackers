@@ -5,7 +5,9 @@ import java.util.HashMap;
 import org.json.simple.JSONObject;
 import org.springframework.stereotype.Service;
 
+import com.newput.domain.DateSheet;
 import com.newput.domain.Employee;
+import com.newput.domain.TimeSheet;
 
 /**
  * 
@@ -73,6 +75,20 @@ public class JsonResService {
 	}
 
 	@SuppressWarnings("unchecked")
+	public JSONObject createTimeSheetJson(HashMap<String,String> map) {
+		JSONObject obj = new JSONObject();
+		obj.put("workDate", map.get("workDate"));
+		obj.put("in", map.get("in"));
+		obj.put("out", map.get("out"));
+		obj.put("lunchIn", map.get("lunchIn"));
+		obj.put("lunchOut", map.get("lunchOut"));
+		obj.put("nightIn", map.get("nightIn"));
+		obj.put("nightOut", map.get("nightOut"));
+		obj.put("workDesc", map.get("workDesc"));
+		return obj;
+	}
+
+	@SuppressWarnings("unchecked")
 	public JSONObject responseSender() {
 		JSONObject obj = new JSONObject();
 		obj.put("response", getMap());
@@ -100,7 +116,7 @@ public class JsonResService {
 	}
 
 	public void errorResponse(String response) {
-		setDataValue(null,null);
+		setDataValue(null, null);
 		setError(response);
 		setRcode("505");
 		setSuccess(false);
