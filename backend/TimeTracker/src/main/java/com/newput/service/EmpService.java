@@ -39,7 +39,6 @@ public class EmpService {
 							if (employee.getDob() != null) {
 								if (employee.getDoj() != null) {
 									if (employee.getGender() != null && !employee.getGender().equalsIgnoreCase("")) {
-										// i = empMapper.insert(employee);
 										i = empMapper.insertSelective(employee);
 										if (i > 0) {
 											jsonResService.successResponse();

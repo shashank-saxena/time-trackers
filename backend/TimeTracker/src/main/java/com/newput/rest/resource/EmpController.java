@@ -10,7 +10,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
 import com.newput.domain.Employee;
-import com.newput.domain.Session;
 import com.newput.service.EmpService;
 import com.newput.service.LoginService;
 import com.newput.utility.JsonResService;
@@ -42,9 +41,6 @@ public class EmpController {
 
 	@Autowired
 	private ReqParseService reqParser;
-
-	@Autowired
-	private Session session;
 
 	@Autowired
 	private LoginService loginService;
@@ -104,19 +100,6 @@ public class EmpController {
 			}
 		} else {
 			jsonResService.errorResponse("Mail id can not be null and in proper format");
-		}
-		return jsonResService.responseSender();
-	}
-
-	@Path("/loginSession")
-	@POST
-	@Produces(MediaType.APPLICATION_JSON)
-	public JSONObject loginSession(@FormParam("token") String token) {
-		if (token != null && !token.equalsIgnoreCase("")) {
-			reqParser.setSessionValue("", "", token);
-			loginService.sessionManagement(session);
-		} else {
-			jsonResService.errorResponse("token can not be blank");
 		}
 		return jsonResService.responseSender();
 	}
