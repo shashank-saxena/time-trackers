@@ -4,6 +4,8 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 //import java.util.ArrayList;
 //import java.util.List;
+import java.util.Calendar;
+import java.util.Date;
 
 import org.apache.commons.codec.binary.Hex;
 import org.apache.openjpa.lib.util.Base16Encoder;
@@ -67,6 +69,19 @@ public class TTUtil {
 		if (contact.matches("\\d{10}")) {
 			return contact;
 		} else {
+			return "";
+		}
+	}
+	
+	public String timeHrs(Long timeValue) {
+		try {
+			Calendar calendar = Calendar.getInstance();
+			Date today = new Date(timeValue);
+			calendar.setTime(today);
+			String timeSlot = calendar.get(Calendar.HOUR_OF_DAY) + ":" + calendar.get(Calendar.MINUTE);			
+			return timeSlot;
+		} catch (Exception e) {
+			e.printStackTrace();
 			return "";
 		}
 	}

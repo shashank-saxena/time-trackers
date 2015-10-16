@@ -57,7 +57,7 @@ public class LoginService {
 					session.setEmpName(emp.getFirstName());
 					session.setToken(util.createSessionKey(getCurrentTime(), emp.getEmail()));
 					session.setCreated(getCurrentTime());
-					session.setExpiresWhen(getCurrentTime() + 1800);
+					session.setExpiresWhen(getCurrentTime() + 3600);
 					i = sessionMapper.insertSelective(session);
 					if (i > 0) {
 						jsonResService.setDataValue("Welcome User created : " + emp.getFirstName(), session.getToken());
@@ -71,7 +71,7 @@ public class LoginService {
 			} else {
 				Session localSession = sessionList.get(0);
 				localSession.setUpdated(getCurrentTime());
-				localSession.setExpiresWhen(getCurrentTime() + 60);
+				localSession.setExpiresWhen(getCurrentTime() + 1800);
 				localSession.setToken(util.createSessionKey(getCurrentTime(), emp.getEmail()));
 				i = sessionMapper.updateByPrimaryKey(localSession);
 				if (i > 0) {
@@ -99,7 +99,7 @@ public class LoginService {
 			Long currentTime = getCurrentTime();
 			if (expireTime > currentTime) {
 				localSession.setUpdated(getCurrentTime());
-				localSession.setExpiresWhen(getCurrentTime() + 60);
+				localSession.setExpiresWhen(getCurrentTime() + 1800);
 				i = sessionMapper.updateByPrimaryKey(localSession);
 				if (i > 0) {
 					jsonResService.successResponse();

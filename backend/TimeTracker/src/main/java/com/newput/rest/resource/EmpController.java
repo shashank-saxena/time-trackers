@@ -5,6 +5,7 @@ import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
+
 import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -13,6 +14,7 @@ import com.newput.domain.Employee;
 import com.newput.service.EmpService;
 import com.newput.service.LoginService;
 import com.newput.service.TSchedualService;
+import com.newput.utility.ExcelTimeSheet;
 import com.newput.utility.JsonResService;
 import com.newput.utility.ReqParseService;
 import com.newput.utility.TTUtil;
@@ -51,6 +53,9 @@ public class EmpController {
 
 	@Autowired
 	private TTUtil util;
+	
+	@Autowired
+	private ExcelTimeSheet excelTimeSheet;
 
 	/**
 	 * @POST Description : Use to add new user into the system and send the
@@ -143,7 +148,14 @@ public class EmpController {
 	public void email() {
 	}
 
-	public void excelExport() {
+	
+	@Path("/excelExport")
+	@POST
+	//@Produces("application/vnd.ms-excel")
+	@Produces(MediaType.APPLICATION_JSON)
+	public JSONObject excelExport(@FormParam("empId") String emp_id) {
+		excelTimeSheet.createExcelSheet(Integer.parseInt(emp_id));
+		return jsonResService.responseSender();
 	}
 
 	public void monthlyExcel() {
@@ -156,6 +168,5 @@ public class EmpController {
 	}
 
 	public void emailValidation() {
-	}
-
+	}	
 }

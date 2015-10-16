@@ -30,7 +30,7 @@ public class SessionFilter implements Filter {
 		String path = request.getRequestURI().substring(23);  
 				
         if(path.equals("register") || path.equals("login") || path.equals("verify")) {        	
-        	//response.sendRedirect("login.jsp");
+        	//response.sendRedirect("login.jsp");        	
         }else{        	
         	String token = request.getHeader("token");
     		if(token == null || token.equals("")){
