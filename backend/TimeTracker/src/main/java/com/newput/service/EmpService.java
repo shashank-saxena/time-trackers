@@ -10,6 +10,7 @@ import com.newput.domain.Employee;
 import com.newput.domain.EmployeeExample;
 import com.newput.mapper.EmployeeMapper;
 import com.newput.utility.JsonResService;
+import com.newput.utility.ReqParseService;
 import com.newput.utility.TTUtil;
 
 /**
@@ -26,7 +27,13 @@ public class EmpService {
 	private JsonResService jsonResService;
 
 	@Autowired
+	private ReqParseService reqres;
+
+	@Autowired
 	private TTUtil util;
+
+	@Autowired
+	private Employee emp;
 
 	public void addUser(Employee employee) {
 		int i = 0;
@@ -85,6 +92,45 @@ public class EmpService {
 			empMapper.updateByExampleSelective(employee, example);
 			jsonResService.setData(jsonResService.createEmployeeJson(employee));
 			jsonResService.successResponse();
+		} else {
+			jsonResService.errorResponse("your id or token is not correct");
+		}
+	}
+
+	public void resetPassword(String email, String newPassword, String pToken) {
+		EmployeeExample example = new EmployeeExample();
+		example.createCriteria().andEmailEqualTo(email);
+		emp.setPassword(newPassword);
+		emp.setpToken(pToken);
+		emp.setPasswordVerification(true);
+		emp.setpExpireAt(reqres.getCurrentTime() + 86400);
+		emp.setUpdated(reqres.getCurrentTime());
+		int i = empMapper.updateByExampleSelective(emp, example);
+		emp.setEmail(email);
+		if (i > 0) {
+			jsonResService.successResponse();
+			jsonResService.setData(jsonResService.createEmployeeJson(emp));
+		} else {
+			jsonResService.errorResponse("invalid response");
+		}
+	}
+
+	public void pwdVerify(Employee employee) {
+		EmployeeExample example = new EmployeeExample();
+		example.createCriteria().andEmailEqualTo(employee.getEmail()).andPTokenEqualTo(employee.getpToken());
+		List<Employee> employeeList = empMapper.selectByExample(example);
+		if (employeeList.size() > 0) {
+			employee = employeeList.get(0);
+			if (employee.getpExpireAt() >= reqres.getCurrentTime()) {
+				example.createCriteria().andEmailEqualTo(employee.getEmail());
+				employee.setStatus(false);
+				employee.setUpdated(new Date().getTime() / 1000);
+				empMapper.updateByExampleSelective(employee, example);
+				jsonResService.setData(jsonResService.createEmployeeJson(employee));
+				jsonResService.successResponse();
+			} else {
+				jsonResService.errorResponse("your password is expire please reset your password again.");
+			}
 		} else {
 			jsonResService.errorResponse("your id or token is not correct");
 		}
