@@ -69,13 +69,16 @@ public class ReqParseService {
 		}
 	}
 
-	public void setVerificationKey(boolean p_status, String pToken, String role) {
-		long systime = new Date().getTime() / 1000;
-		emp.setPasswordVerification(p_status);
-		emp.setpExpireAt(systime + 86400);
-		emp.setpToken(pToken);
-		emp.setRole(role);
-	}
+	// public void setVerificationKey(boolean p_status, String pToken, String
+	// role) {
+	// public void setVerificationKey(String email, String newPassword,String
+	// pToken) {
+	// emp.setPasswordVerification(true);
+	// emp.setpExpireAt(getCurrentTime() + 86400);
+	// emp.setPassword(newPassword);
+	// emp.setpToken(pToken);
+	// emp.setEmail(email);
+	// }
 
 	public void setSessionValue(String email, String password, String token) {
 		try {
@@ -93,19 +96,26 @@ public class ReqParseService {
 		emp.setUpdated(getCurrentTime());
 	}
 
+	public void setPValidationValue(String email, String token) {
+		emp.setEmail(email);
+		emp.setpToken(token);
+		emp.setUpdated(getCurrentTime());
+	}
+
 	public TimeSheet setTimeSheetValue(String workDate, String in, String out, String chunkId, int emp_id) {
 		SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
 		try {
 			Date wrkdate = sdf.parse(workDate);
-			long systime = wrkdate.getTime() / 1000;
+			long systime = wrkdate.getTime();
 			timeSheet.setCreated(getCurrentTime());
 			timeSheet.setWorkDate(systime);
+			System.out.println("emp_id::" + emp_id);
 			timeSheet.setEmpId(emp_id);
 			timeSheet.setChunkId(Integer.parseInt(chunkId));
 			if (in != null && !in.equalsIgnoreCase("")) {
-				timeSheet.setTimeIn(Long.parseLong(in));
+				timeSheet.setTimeIn(util.timeMiliSec(workDate, in));
 			}
-			timeSheet.setTimeOut(Long.parseLong(out));
+			timeSheet.setTimeOut(util.timeMiliSec(workDate, out));
 		} catch (Exception e) {
 			e.getMessage();
 		}
@@ -115,8 +125,8 @@ public class ReqParseService {
 	public void setDateSheetValue(String desc, String workdate, int emp_id) {
 		SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
 		try {
-			Date currntdate = sdf.parse(workdate);
-			long systime = currntdate.getTime() / 1000;
+			Date workDate = sdf.parse(workdate);
+			long systime = workDate.getTime();
 			dateSheet.setCreated(getCurrentTime());
 			dateSheet.setEmpId(emp_id);
 			dateSheet.setWorkDate(systime);

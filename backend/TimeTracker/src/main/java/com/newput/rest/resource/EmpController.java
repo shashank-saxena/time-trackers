@@ -1,10 +1,13 @@
 package com.newput.rest.resource;
 
 import javax.ws.rs.FormParam;
+import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
+
+import org.apache.openjpa.json.JSON;
 
 import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +16,7 @@ import org.springframework.stereotype.Controller;
 import com.newput.domain.Employee;
 import com.newput.service.EmpService;
 import com.newput.service.LoginService;
+import com.newput.service.SelectiveExcel;
 import com.newput.service.TSchedualService;
 import com.newput.utility.ExcelTimeSheet;
 import com.newput.utility.JsonResService;
@@ -29,6 +33,9 @@ import com.newput.utility.VerificationMailSend;
 @Controller
 @Path("/employee")
 public class EmpController {
+
+	@Autowired
+	private SelectiveExcel excel;
 
 	@Autowired
 	private TSchedualService timeSchedual;
@@ -70,11 +77,11 @@ public class EmpController {
 			@FormParam("address") String address, @FormParam("contact") String contact,
 			@FormParam("gender") String gender, @FormParam("password") String password) {
 
-		String token = emailSend.generateRandomString();
+		String token = util.generateRandomString();
 		reqParser.setEmployeeValue(firstName, lastName, email, dob, doj, address, contact, gender, password, token);
 		empService.addUser(emp);
 		if (jsonResService.isSuccess()) {
-			emailSend.sendMail();
+			emailSend.sendMail("registration");
 		}
 		return jsonResService.responseSender();
 	}
@@ -113,10 +120,6 @@ public class EmpController {
 		return jsonResService.responseSender();
 	}
 
-	public void forgotPwd(@FormParam("email") String email) {
-
-	}
-
 	@Path("/timeEntry")
 	@POST
 	@Produces(MediaType.APPLICATION_JSON)
@@ -135,18 +138,38 @@ public class EmpController {
 					timeSchedual.dateSheetValue();
 				}
 				timeSchedual.clearMap();
-				// jsonResService.setTimeSheetValue(workdate,in,out,id,empId);
 			} else {
 				jsonResService.errorResponse("emp_id can not be null");
 			}
 		} else {
 			jsonResService.errorResponse("Date can not be null");
 		}
+
 		return jsonResService.responseSender();
 	}
 
-	public void email() {
+	@Path("/forgotPwd")
+	@POST
+	@Produces(MediaType.APPLICATION_JSON)
+	public JSONObject forgotPwd(@FormParam("email") String email, @FormParam("newPassword") String newPassword) {
+
+		if (email != null && !email.equalsIgnoreCase("") && util.mailFormat(email)) {
+			if (newPassword != null && !newPassword.equalsIgnoreCase("")) {
+				String ptoken = util.generateRandomString();
+				newPassword = util.md5(newPassword);
+				empService.resetPassword(email, newPassword, ptoken);
+				if (jsonResService.isSuccess()) {
+					emailSend.sendMail("resetPassword");
+				}
+			} else {
+				jsonResService.errorResponse("password can not be blank");
+			}
+		} else {
+			jsonResService.errorResponse("Mail id can not be null and in proper format");
+		}
+		return jsonResService.responseSender();
 	}
+
 
 	
 	@Path("/excelExport")
@@ -156,17 +179,53 @@ public class EmpController {
 	public JSONObject excelExport(@FormParam("empId") String emp_id) {
 		excelTimeSheet.createExcelSheet(Integer.parseInt(emp_id));
 		return jsonResService.responseSender();
+
+}
+	@Path("/pwdVerify")
+	@POST
+	@Produces(MediaType.APPLICATION_JSON)
+	public JSONObject passwordVerification(@FormParam("email") String emailId, @FormParam("pToken") String pToken) {
+		if (emailId != null && !emailId.equalsIgnoreCase("")) {
+			if (pToken != null && !pToken.equalsIgnoreCase("")) {
+				reqParser.setPValidationValue(emailId, pToken);
+				empService.pwdVerify(emp);
+			} else {
+				jsonResService.errorResponse("token can not be blank");
+			}
+		} else {
+			jsonResService.errorResponse("Mail id can not be null");
+		}
+		return jsonResService.responseSender();
 	}
 
-	public void monthlyExcel() {
+	@Path("/monthlyExcel")
+	@POST
+	@Produces(MediaType.APPLICATION_JSON)
+	public JSONObject monthlyExcel(@FormParam("month") String monthName) {
+		if (monthName != null && !monthName.equalsIgnoreCase("")) {
+			excel.monthSheet(monthName);
+//			timeSchedual.toCheck();
+		} else {
+			jsonResService.errorResponse("Please provide the month to select data");
+		}
+
+		return jsonResService.responseSender();
+	}
+
+	public void email() {
+	}
+
+	public void excelExport() {
 	}
 
 	public void editDetail() {
 	}
 
-	public void signOut() {
-	}
 
 	public void emailValidation() {
 	}	
+
+	public void signOut() {
+	}
+
 }

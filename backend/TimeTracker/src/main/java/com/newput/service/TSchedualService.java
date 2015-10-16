@@ -38,13 +38,13 @@ public class TSchedualService {
 
 	@Autowired
 	private JsonResService jsonResService;
-	
+
 	HashMap<String, String> map = new HashMap<>();
 
 	public void timeSheetValue(String lunchIn, String in, String out, String workDate, String lunchOut, String nightIn,
 			String nightOut, int emp_id) {
 		map.put("workDate", workDate);
-		if ((in != null && !in.equalsIgnoreCase("")) || (out != null && !out.equalsIgnoreCase(""))) {			
+		if ((in != null && !in.equalsIgnoreCase("")) || (out != null && !out.equalsIgnoreCase(""))) {
 			map.put("in", in);
 			map.put("out", out);
 			timeSheet = reqParser.setTimeSheetValue(workDate, in, out, "1", emp_id);
@@ -100,7 +100,7 @@ public class TSchedualService {
 		} else {
 			System.out.println("successfully insert or update");
 			jsonResService.setData(jsonResService.createTimeSheetJson(map));
-			jsonResService.successResponse();			
+			jsonResService.successResponse();
 		}
 	}
 
@@ -122,8 +122,9 @@ public class TSchedualService {
 			int i = dateSheetMapper.updateByExampleSelective(dateSheet1, example);
 			if (i > 0) {
 				jsonResService.setData(jsonResService.createTimeSheetJson(map));
-//				jsonResService.setDataValue("value updated successfully", "");
-				jsonResService.successResponse();				
+				// jsonResService.setDataValue("value updated successfully",
+				// "");
+				jsonResService.successResponse();
 			} else {
 				jsonResService.errorResponse("Value is not updated.Please try again");
 			}
@@ -132,15 +133,16 @@ public class TSchedualService {
 			int j = dateSheetMapper.insertSelective(dateSheet);
 			if (j > 0) {
 				jsonResService.setData(jsonResService.createTimeSheetJson(map));
-//				jsonResService.setDataValue("value inserted successfully", "");
+				// jsonResService.setDataValue("value inserted successfully",
+				// "");
 				jsonResService.successResponse();
-			}else {
+			} else {
 				jsonResService.errorResponse("Value is not inserted.Please try again");
 			}
 		}
 	}
-	
-	public void clearMap(){
+
+	public void clearMap() {
 		map.clear();
-	}
+	}	
 }
