@@ -1,11 +1,13 @@
 package com.newput.service;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 //import java.util.ArrayList;
 //
 //import java.util.Iterator;
 import java.util.List;
 
+import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -67,6 +69,7 @@ public class TSchedualService {
 	}
 
 	public void saveTimeSheet(TimeSheet timeSheet) {
+		ArrayList<JSONObject> objArray = new ArrayList<JSONObject>();
 		boolean status = false;
 		TimeSheetExample example = new TimeSheetExample();
 		example.createCriteria().andEmpIdEqualTo(timeSheet.getEmpId()).andWorkDateEqualTo(timeSheet.getWorkDate())
@@ -98,13 +101,21 @@ public class TSchedualService {
 			//System.out.println("fail to insert or update");
 			jsonResService.errorResponse("fail to insert or update");
 		} else {
+<<<<<<< HEAD
 			//System.out.println("successfully insert or update");
 			jsonResService.setData(jsonResService.createTimeSheetJson(map));
+=======
+			System.out.println("successfully insert or update");
+//			jsonResService.setData(jsonResService.createTimeSheetJson(map));
+			objArray.add(jsonResService.createTimeSheetJson(map));
+			jsonResService.setData(objArray);
+>>>>>>> fb2c2c397aca13d0adaf9e242174558b1cc3c96d
 			jsonResService.successResponse();
 		}
 	}
 
 	public void dateSheetValue() {
+		ArrayList<JSONObject> objArray = new ArrayList<JSONObject>();
 		map.put("workDesc", dateSheet.getWorkDesc());
 		DateSheetExample example = new DateSheetExample();
 
@@ -121,7 +132,8 @@ public class TSchedualService {
 			dateSheet1.setUpdated(reqParser.getCurrentTime());
 			int i = dateSheetMapper.updateByExampleSelective(dateSheet1, example);
 			if (i > 0) {
-				jsonResService.setData(jsonResService.createTimeSheetJson(map));
+				objArray.add(jsonResService.createTimeSheetJson(map));
+				jsonResService.setData(objArray);
 				// jsonResService.setDataValue("value updated successfully",
 				// "");
 				jsonResService.successResponse();
@@ -132,7 +144,8 @@ public class TSchedualService {
 			// insert
 			int j = dateSheetMapper.insertSelective(dateSheet);
 			if (j > 0) {
-				jsonResService.setData(jsonResService.createTimeSheetJson(map));
+				objArray.add(jsonResService.createTimeSheetJson(map));
+				jsonResService.setData(objArray);
 				// jsonResService.setDataValue("value inserted successfully",
 				// "");
 				jsonResService.successResponse();

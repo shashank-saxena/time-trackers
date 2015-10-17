@@ -171,12 +171,23 @@ public class EmpController {
 	@POST
 	// @Produces("application/vnd.ms-excel")
 	@Produces(MediaType.APPLICATION_JSON)
+<<<<<<< HEAD
 	public JSONObject excelExport(@FormParam("empId") String emp_id, @FormParam("month") String month,
 			@FormParam("year") String year) {
 		excelTimeSheet.createExcelSheet(Integer.parseInt(emp_id), month, year);
+=======
+	public JSONObject excelExport(@FormParam("empId") String emp_id, @FormParam("month") String monthName,
+			@FormParam("year") String year) {
+		excelTimeSheet.createExcelSheet(Integer.parseInt(emp_id), monthName, year);
+>>>>>>> fb2c2c397aca13d0adaf9e242174558b1cc3c96d
 		return jsonResService.responseSender();
 	}
 
+<<<<<<< HEAD
+=======
+	}
+
+>>>>>>> fb2c2c397aca13d0adaf9e242174558b1cc3c96d
 	@Path("/pwdVerify")
 	@POST
 	@Produces(MediaType.APPLICATION_JSON)
@@ -197,10 +208,15 @@ public class EmpController {
 	@Path("/monthlyExcel")
 	@POST
 	@Produces(MediaType.APPLICATION_JSON)
-	public JSONObject monthlyExcel(@FormParam("month") String monthName) {
+	public JSONObject monthlyExcel(@FormParam("month") String monthName, @FormParam("empId") int emp_id,
+			@FormParam("year") String year) {
 		if (monthName != null && !monthName.equalsIgnoreCase("")) {
+<<<<<<< HEAD
 			excel.monthSheet(monthName);
 			// timeSchedual.toCheck();
+=======
+			excel.monthSheet(monthName, emp_id, year);
+>>>>>>> fb2c2c397aca13d0adaf9e242174558b1cc3c96d
 		} else {
 			jsonResService.errorResponse("Please provide the month to select data");
 		}
