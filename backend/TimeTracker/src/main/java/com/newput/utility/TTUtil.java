@@ -14,6 +14,7 @@ import java.util.Random;
 import org.apache.commons.codec.binary.Hex;
 import org.apache.openjpa.lib.util.Base16Encoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.servlet.mvc.method.annotation.CallableMethodReturnValueHandler;
 
 @Service
 public class TTUtil {
@@ -80,21 +81,6 @@ public class TTUtil {
 		}
 	}
 
-	
-	public String timeHrs(Long timeValue) {
-		try {
-			Calendar calendar = Calendar.getInstance();
-			Date today = new Date(timeValue);
-			calendar.setTime(today);
-			String timeSlot = calendar.get(Calendar.HOUR_OF_DAY) + ":" + calendar.get(Calendar.MINUTE);			
-			return timeSlot;
-		} catch (Exception e) {
-			e.printStackTrace();
-			return "";
-		}
-}
-
-
 	/**
 	 * Description : use to create a AlphaNumeric token for the verification of
 	 * email
@@ -128,16 +114,26 @@ public class TTUtil {
 		}
 	}
 
-	public HashMap<String, Long> getMonthlyData(String monthName){
+	public HashMap<String, Long> getMonthlyDate(String monthName, String year) {
 		HashMap<String, Long> map = new HashMap<String, Long>();
-		try {		
+		int reqYear = 0;
+		try {
+
 			SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
 			Calendar cal = Calendar.getInstance();
+
+			if (year != null && !year.equalsIgnoreCase("")) {
+				reqYear = Integer.parseInt(year);
+			} else {
+				reqYear = cal.get(Calendar.YEAR);
+			}
+
 			int currMnth = cal.get(Calendar.MONTH) + 1;
 			cal.setTime(new SimpleDateFormat("MMM").parse(monthName));
 			int reqMnth = cal.get(Calendar.MONTH) + 1;
 
 			Calendar calendar = Calendar.getInstance();
+			calendar.set(Calendar.YEAR, reqYear);
 			calendar.add(Calendar.MONTH, -(currMnth - reqMnth));
 			int min = calendar.getActualMinimum(Calendar.DAY_OF_MONTH);
 			calendar.set(Calendar.DAY_OF_MONTH, min);
@@ -154,14 +150,13 @@ public class TTUtil {
 		return map;
 	}
 
-//	public static void main(String args[]) {
-//		timeHrs(1444672803000L);
-//	}
+	// public static void main(String args[]) {
+	// timeHrs(1444672803000L);
+	// }
 
 	public Long timeMiliSec(String workDate, String time) throws ParseException {
 		SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
 		Date date = sdf.parse(workDate);
-		System.out.println(date.getTime());
 		Calendar calender = Calendar.getInstance();
 		calender.setTime(date);
 		String delims = ":";
@@ -170,9 +165,19 @@ public class TTUtil {
 		int min = Integer.parseInt(tokens[1]);
 		calender.set(Calendar.HOUR, hrs);
 		calender.set(Calendar.MINUTE, min);
-		System.out.println(calender.getTimeInMillis());
 		return calender.getTimeInMillis();
 	}
 
-
+	public String timeHrs(Long timeValue) {
+		try {
+			Calendar calendar = Calendar.getInstance();
+			Date today = new Date(timeValue);
+			calendar.setTime(today);
+			String timeSlot = calendar.get(Calendar.HOUR_OF_DAY) + ":" + calendar.get(Calendar.MINUTE);
+			return timeSlot;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return "";
+		}
+	}
 }
