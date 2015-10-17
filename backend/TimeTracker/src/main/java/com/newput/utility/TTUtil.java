@@ -14,7 +14,6 @@ import java.util.Random;
 import org.apache.commons.codec.binary.Hex;
 import org.apache.openjpa.lib.util.Base16Encoder;
 import org.springframework.stereotype.Service;
-import org.springframework.web.servlet.mvc.method.annotation.CallableMethodReturnValueHandler;
 
 @Service
 public class TTUtil {
@@ -81,7 +80,6 @@ public class TTUtil {
 		}
 	}
 
-<<<<<<< HEAD
 	public String timeHrs(Long timeValue) {
 		try {
 			Calendar calendar = Calendar.getInstance();
@@ -102,8 +100,6 @@ public class TTUtil {
 		}		
 	}
 
-=======
->>>>>>> fb2c2c397aca13d0adaf9e242174558b1cc3c96d
 	/**
 	 * Description : use to create a AlphaNumeric token for the verification of
 	 * email
@@ -137,17 +133,10 @@ public class TTUtil {
 		}
 	}
 
-<<<<<<< HEAD
-	public HashMap<String, Long> getMonthlyDate(String monthName) {
-		HashMap<String, Long> map = new HashMap<String, Long>();
-		try {
-=======
 	public HashMap<String, Long> getMonthlyDate(String monthName, String year) {
 		HashMap<String, Long> map = new HashMap<String, Long>();
 		int reqYear = 0;
 		try {
-
->>>>>>> fb2c2c397aca13d0adaf9e242174558b1cc3c96d
 			SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
 			Calendar cal = Calendar.getInstance();
 
@@ -179,13 +168,6 @@ public class TTUtil {
 		return map;
 	}
 
-<<<<<<< HEAD
-=======
-	// public static void main(String args[]) {
-	// timeHrs(1444672803000L);
-	// }
-
->>>>>>> fb2c2c397aca13d0adaf9e242174558b1cc3c96d
 	public Long timeMiliSec(String workDate, String time) throws ParseException {
 		SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
 		Date date = sdf.parse(workDate);
@@ -200,19 +182,4 @@ public class TTUtil {
 		return calender.getTimeInMillis();
 	}
 
-<<<<<<< HEAD
-=======
-	public String timeHrs(Long timeValue) {
-		try {
-			Calendar calendar = Calendar.getInstance();
-			Date today = new Date(timeValue);
-			calendar.setTime(today);
-			String timeSlot = calendar.get(Calendar.HOUR_OF_DAY) + ":" + calendar.get(Calendar.MINUTE);
-			return timeSlot;
-		} catch (Exception e) {
-			e.printStackTrace();
-			return "";
-		}
-	}
->>>>>>> fb2c2c397aca13d0adaf9e242174558b1cc3c96d
 }

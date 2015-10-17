@@ -101,15 +101,10 @@ public class TSchedualService {
 			//System.out.println("fail to insert or update");
 			jsonResService.errorResponse("fail to insert or update");
 		} else {
-<<<<<<< HEAD
 			//System.out.println("successfully insert or update");
-			jsonResService.setData(jsonResService.createTimeSheetJson(map));
-=======
-			System.out.println("successfully insert or update");
-//			jsonResService.setData(jsonResService.createTimeSheetJson(map));
+			//jsonResService.setData(jsonResService.createTimeSheetJson(map));
 			objArray.add(jsonResService.createTimeSheetJson(map));
 			jsonResService.setData(objArray);
->>>>>>> fb2c2c397aca13d0adaf9e242174558b1cc3c96d
 			jsonResService.successResponse();
 		}
 	}
