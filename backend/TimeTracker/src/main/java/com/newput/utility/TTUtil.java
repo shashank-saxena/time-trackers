@@ -14,7 +14,6 @@ import java.util.Random;
 import org.apache.commons.codec.binary.Hex;
 import org.apache.openjpa.lib.util.Base16Encoder;
 import org.springframework.stereotype.Service;
-import org.springframework.web.servlet.mvc.method.annotation.CallableMethodReturnValueHandler;
 
 @Service
 public class TTUtil {
@@ -81,6 +80,26 @@ public class TTUtil {
 		}
 	}
 
+	public String timeHrs(Long timeValue) {
+		try {
+			Calendar calendar = Calendar.getInstance();
+			Date today = new Date(timeValue);
+			calendar.setTime(today);
+			String hours = ""+calendar.get(Calendar.HOUR_OF_DAY);
+			if(hours.length() == 1){
+				hours = "0"+hours;
+			}
+			String minute = ""+calendar.get(Calendar.MINUTE);
+			if(minute.length() == 1){
+				minute = minute+"0";
+			}
+			String timeSlot = hours + ":" + minute;
+			return timeSlot;
+		} catch (Exception e) {
+			return "";			
+		}		
+	}
+
 	/**
 	 * Description : use to create a AlphaNumeric token for the verification of
 	 * email
@@ -118,7 +137,6 @@ public class TTUtil {
 		HashMap<String, Long> map = new HashMap<String, Long>();
 		int reqYear = 0;
 		try {
-
 			SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
 			Calendar cal = Calendar.getInstance();
 
@@ -150,10 +168,6 @@ public class TTUtil {
 		return map;
 	}
 
-	// public static void main(String args[]) {
-	// timeHrs(1444672803000L);
-	// }
-
 	public Long timeMiliSec(String workDate, String time) throws ParseException {
 		SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
 		Date date = sdf.parse(workDate);
@@ -168,16 +182,4 @@ public class TTUtil {
 		return calender.getTimeInMillis();
 	}
 
-	public String timeHrs(Long timeValue) {
-		try {
-			Calendar calendar = Calendar.getInstance();
-			Date today = new Date(timeValue);
-			calendar.setTime(today);
-			String timeSlot = calendar.get(Calendar.HOUR_OF_DAY) + ":" + calendar.get(Calendar.MINUTE);
-			return timeSlot;
-		} catch (Exception e) {
-			e.printStackTrace();
-			return "";
-		}
-	}
 }

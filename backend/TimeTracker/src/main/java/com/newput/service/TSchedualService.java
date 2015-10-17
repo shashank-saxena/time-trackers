@@ -98,11 +98,11 @@ public class TSchedualService {
 		}
 		if (status) {
 			// return json object;
-			System.out.println("fail to insert or update");
+			//System.out.println("fail to insert or update");
 			jsonResService.errorResponse("fail to insert or update");
 		} else {
-			System.out.println("successfully insert or update");
-//			jsonResService.setData(jsonResService.createTimeSheetJson(map));
+			//System.out.println("successfully insert or update");
+			//jsonResService.setData(jsonResService.createTimeSheetJson(map));
 			objArray.add(jsonResService.createTimeSheetJson(map));
 			jsonResService.setData(objArray);
 			jsonResService.successResponse();
