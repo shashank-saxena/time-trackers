@@ -29,23 +29,24 @@ public class SessionFilter implements Filter {
 		
 		String path = request.getRequestURI().substring(23);  
 				
-        if(path.equals("register") || path.equals("login") || path.equals("verify")) {        	
-        	//response.sendRedirect("login.jsp");        	
-        }else{        	
+        if(path.equals("register") || path.equals("login") || path.equals("verify")) {          	
+        	chain.doFilter(req, res);
+        }else{
         	String token = request.getHeader("token");
     		if(token == null || token.equals("")){
     			response.setHeader("response status", ""+false);
-    			response.setHeader("response error", ""+HttpServletResponse.SC_BAD_REQUEST);    			
+    			response.setHeader("response error", ""+HttpServletResponse.SC_BAD_REQUEST);  
+    			
     		}else{
     			if(loginService.loginSessionFilter(token)){
     				response.setHeader("response status", ""+loginService.loginSessionFilter(token));
+    				chain.doFilter(req, res);
     			}else{
     				response.setHeader("response status", ""+loginService.loginSessionFilter(token));
-    				response.setHeader("response error", ""+HttpServletResponse.SC_UNAUTHORIZED);
+    				response.setHeader("response error", ""+HttpServletResponse.SC_UNAUTHORIZED);    				
     			}    			
     		}    		
-        }
-		chain.doFilter(req, res);
+        }		
 	}
 
 	@Override
