@@ -74,7 +74,7 @@ public class ExcelTimeSheet {
 		rowCount = 5;
 
 		try {
-			FileOutputStream outStream = new FileOutputStream(new File("H:/timeSheet.xls"));
+			FileOutputStream outStream = new FileOutputStream(new File("C:/Users/ashu/Downloads/demo/timeSheet.xls"));
 			workbook.write(outStream);
 			outStream.close();
 			jsonResService.setDataValue("timeSheet.xls file written successfully on disk.", "");
@@ -176,15 +176,11 @@ public class ExcelTimeSheet {
 		aRow1.createCell(1).setCellValue("Name");
 		sheet.addMergedRegion(new CellRangeAddress( 0, 0, 3, 6 ));
 		aRow1.createCell(3).setCellValue(empMap.get("name"));
-		sheet.addMergedRegion(new CellRangeAddress(0, 0, 3, 6));
-		aRow1.createCell(3).setCellValue("emp name");
 		HSSFRow aRow2 = sheet.createRow(1);
 		sheet.addMergedRegion(new CellRangeAddress(1, 1, 1, 2));
 		aRow2.createCell(1).setCellValue("Month");
 		sheet.addMergedRegion(new CellRangeAddress( 1, 1, 3, 6 ));
 		aRow2.createCell(3).setCellValue(empMap.get("month"));
-		sheet.addMergedRegion(new CellRangeAddress(1, 1, 3, 6));
-		aRow2.createCell(3).setCellValue("emp month");
 		HSSFRow aRow3 = sheet.createRow(2);
 		sheet.addMergedRegion(new CellRangeAddress(2, 2, 1, 2));
 		aRow3.createCell(1).setCellValue("Year");
@@ -198,9 +194,6 @@ public class ExcelTimeSheet {
 //		aRow4.createCell(7).setCellType(Cell.CELL_TYPE_FORMULA);
 //		//sheet.getRow(38).getCell(7).setCellFormula("SUM(H6:H20)");
 //		aRow4.getCell(7).setCellFormula("SUM(H6:H20)");
-		
-		sheet.addMergedRegion(new CellRangeAddress(2, 2, 3, 6));
-		aRow3.createCell(3).setCellValue("emp year");
 
 		// create style for header cells
 		CellStyle style = workbook.createCellStyle();
