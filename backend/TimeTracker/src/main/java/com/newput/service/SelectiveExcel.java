@@ -14,7 +14,7 @@ public class SelectiveExcel {
 	private TTUtil util;
 	
 	public void monthSheet(String monthName) {
-		HashMap<String , Long> mapValue = util.getMonthlyData(monthName);
+		HashMap<String , Long> mapValue = util.getMonthlyDate(monthName);
 		
 	}
 

@@ -1,13 +1,10 @@
 package com.newput.rest.resource;
 
 import javax.ws.rs.FormParam;
-import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
-
-import org.apache.openjpa.json.JSON;
 
 import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -60,7 +57,7 @@ public class EmpController {
 
 	@Autowired
 	private TTUtil util;
-	
+
 	@Autowired
 	private ExcelTimeSheet excelTimeSheet;
 
@@ -170,17 +167,16 @@ public class EmpController {
 		return jsonResService.responseSender();
 	}
 
-
-	
 	@Path("/excelExport")
 	@POST
-	//@Produces("application/vnd.ms-excel")
+	// @Produces("application/vnd.ms-excel")
 	@Produces(MediaType.APPLICATION_JSON)
-	public JSONObject excelExport(@FormParam("empId") String emp_id) {
-		excelTimeSheet.createExcelSheet(Integer.parseInt(emp_id));
+	public JSONObject excelExport(@FormParam("empId") String emp_id, @FormParam("month") String month,
+			@FormParam("year") String year) {
+		excelTimeSheet.createExcelSheet(Integer.parseInt(emp_id), month, year);
 		return jsonResService.responseSender();
+	}
 
-}
 	@Path("/pwdVerify")
 	@POST
 	@Produces(MediaType.APPLICATION_JSON)
@@ -204,7 +200,7 @@ public class EmpController {
 	public JSONObject monthlyExcel(@FormParam("month") String monthName) {
 		if (monthName != null && !monthName.equalsIgnoreCase("")) {
 			excel.monthSheet(monthName);
-//			timeSchedual.toCheck();
+			// timeSchedual.toCheck();
 		} else {
 			jsonResService.errorResponse("Please provide the month to select data");
 		}
@@ -221,9 +217,8 @@ public class EmpController {
 	public void editDetail() {
 	}
 
-
 	public void emailValidation() {
-	}	
+	}
 
 	public void signOut() {
 	}
