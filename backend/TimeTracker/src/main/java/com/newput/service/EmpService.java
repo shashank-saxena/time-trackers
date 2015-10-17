@@ -1,8 +1,10 @@
 package com.newput.service;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -34,7 +36,7 @@ public class EmpService {
 
 	@Autowired
 	private Employee emp;
-
+	ArrayList<JSONObject> objArray = new ArrayList<JSONObject>();
 	public void addUser(Employee employee) {
 		int i = 0;
 		if (employee.getEmail() != null && !employee.getEmail().equalsIgnoreCase("")
@@ -49,7 +51,8 @@ public class EmpService {
 										i = empMapper.insertSelective(employee);
 										if (i > 0) {
 											jsonResService.successResponse();
-											jsonResService.setData(jsonResService.createEmployeeJson(employee));
+											objArray.add(jsonResService.createEmployeeJson(employee));
+											jsonResService.setData(objArray);
 										} else {
 											jsonResService.errorResponse("invalid response");
 										}
@@ -90,7 +93,8 @@ public class EmpService {
 			employee.setUpdated(new Date().getTime() / 1000);
 			employee.setRole("employee");
 			empMapper.updateByExampleSelective(employee, example);
-			jsonResService.setData(jsonResService.createEmployeeJson(employee));
+			objArray.add(jsonResService.createEmployeeJson(employee));
+			jsonResService.setData(objArray);
 			jsonResService.successResponse();
 		} else {
 			jsonResService.errorResponse("your id or token is not correct");
@@ -109,7 +113,9 @@ public class EmpService {
 		emp.setEmail(email);
 		if (i > 0) {
 			jsonResService.successResponse();
-			jsonResService.setData(jsonResService.createEmployeeJson(emp));
+			objArray.add(jsonResService.createEmployeeJson(emp));
+			jsonResService.setData(objArray);
+//			jsonResService.setData(jsonResService.createEmployeeJson(emp));
 		} else {
 			jsonResService.errorResponse("invalid response");
 		}
@@ -126,7 +132,9 @@ public class EmpService {
 				employee.setStatus(false);
 				employee.setUpdated(new Date().getTime() / 1000);
 				empMapper.updateByExampleSelective(employee, example);
-				jsonResService.setData(jsonResService.createEmployeeJson(employee));
+				objArray.add(jsonResService.createEmployeeJson(employee));
+				jsonResService.setData(objArray);
+//				jsonResService.setData(jsonResService.createEmployeeJson(employee));
 				jsonResService.successResponse();
 			} else {
 				jsonResService.errorResponse("your password is expire please reset your password again.");
