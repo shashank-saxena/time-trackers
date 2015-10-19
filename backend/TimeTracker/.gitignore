@@ -1,1 +1,4 @@
-/target/
+#java class file ignore
+*.class
+
+/target/*
