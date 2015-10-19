@@ -148,18 +148,13 @@ public class EmpController {
 	@Path("/forgotPwd")
 	@POST
 	@Produces(MediaType.APPLICATION_JSON)
-	public JSONObject forgotPwd(@FormParam("email") String email, @FormParam("newPassword") String newPassword) {
+	public JSONObject forgotPwd(@FormParam("email") String email) {
 
 		if (email != null && !email.equalsIgnoreCase("") && util.mailFormat(email)) {
-			if (newPassword != null && !newPassword.equalsIgnoreCase("")) {
-				String ptoken = util.generateRandomString();
-				newPassword = util.md5(newPassword);
-				empService.resetPassword(email, newPassword, ptoken);
-				if (jsonResService.isSuccess()) {
-					emailSend.sendMail("resetPassword");
-				}
-			} else {
-				jsonResService.errorResponse("password can not be blank");
+			String ptoken = util.generateRandomString();
+			empService.resetPassword(email, ptoken);
+			if (jsonResService.isSuccess()) {
+				emailSend.sendMail("resetPassword");
 			}
 		} else {
 			jsonResService.errorResponse("Mail id can not be null and in proper format");
@@ -180,11 +175,19 @@ public class EmpController {
 	@Path("/pwdVerify")
 	@POST
 	@Produces(MediaType.APPLICATION_JSON)
-	public JSONObject passwordVerification(@FormParam("email") String emailId, @FormParam("pToken") String pToken) {
-		if (emailId != null && !emailId.equalsIgnoreCase("")) {
+	// public JSONObject passwordVerification(@FormParam("email") String
+	// emailId, @FormParam("pToken") String pToken) {
+	public JSONObject passwordVerification(@FormParam("empId") int empId, @FormParam("pToken") String pToken,
+			@FormParam("newPassword") String newPwd) {
+		if (empId > 0) {
 			if (pToken != null && !pToken.equalsIgnoreCase("")) {
-				reqParser.setPValidationValue(emailId, pToken);
-				empService.pwdVerify(emp);
+				if (newPwd != null && !newPwd.equalsIgnoreCase("")) {
+					newPwd = util.md5(newPwd);
+					reqParser.setPValidationValue(empId, pToken, newPwd);
+					empService.pwdVerify(emp);
+				} else {
+					jsonResService.errorResponse("Password can not be blank");
+				}
 			} else {
 				jsonResService.errorResponse("token can not be blank");
 			}
