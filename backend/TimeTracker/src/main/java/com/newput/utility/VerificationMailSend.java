@@ -29,12 +29,12 @@ public class VerificationMailSend {
 		email.setTo(emp.getEmail());
 		email.setSubject("Confirmation Mail");
 		if (module.equalsIgnoreCase("registration")) {
-			email.setText("Welcome, You are successfully register Please click here http://tracker/login?a="
+			email.setText("Welcome, You are successfully register Please click here http://tracker/login?ET="
 					+ emp.getvToken());
 
 		} else if (module.equalsIgnoreCase("resetPassword")) {
-			email.setText("Welcome, Please confirm your mail id. click here http://tracker/login?a="
-					+ emp.getpToken());
+			email.setText("Welcome, Please confirm your mail id. click here http://tracker/login?PT=" + emp.getpToken()
+					+ "&id=" + emp.getId());
 		}
 		mailSender.send(email);
 	}

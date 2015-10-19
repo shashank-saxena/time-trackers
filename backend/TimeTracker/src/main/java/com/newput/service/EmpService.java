@@ -37,6 +37,7 @@ public class EmpService {
 	@Autowired
 	private Employee emp;
 	ArrayList<JSONObject> objArray = new ArrayList<JSONObject>();
+
 	public void addUser(Employee employee) {
 		int i = 0;
 		if (employee.getEmail() != null && !employee.getEmail().equalsIgnoreCase("")
@@ -80,6 +81,7 @@ public class EmpService {
 		} else {
 			jsonResService.errorResponse("Mail id should be valid");
 		}
+		objArray.clear();
 	}
 
 	public void mailVerify(Employee employee) {
@@ -99,48 +101,63 @@ public class EmpService {
 		} else {
 			jsonResService.errorResponse("your id or token is not correct");
 		}
+		objArray.clear();
 	}
 
-	public void resetPassword(String email, String newPassword, String pToken) {
+	public void resetPassword(String email, String pToken) {
+
 		EmployeeExample example = new EmployeeExample();
 		example.createCriteria().andEmailEqualTo(email);
-		emp.setPassword(newPassword);
-		emp.setpToken(pToken);
-		emp.setPasswordVerification(true);
-		emp.setpExpireAt(reqres.getCurrentTime() + 86400);
-		emp.setUpdated(reqres.getCurrentTime());
-		int i = empMapper.updateByExampleSelective(emp, example);
-		emp.setEmail(email);
-		if (i > 0) {
-			jsonResService.successResponse();
-			objArray.add(jsonResService.createEmployeeJson(emp));
-			jsonResService.setData(objArray);
-//			jsonResService.setData(jsonResService.createEmployeeJson(emp));
+
+		List<Employee> empl = empMapper.selectByExample(example);
+		if (empl.size() > 0) {
+			Employee emply = new Employee();
+			emply = empl.get(0);
+			emply.setpToken(pToken);
+			emply.setpExpireAt(reqres.getCurrentTime() + 30);
+			emply.setUpdated(reqres.getCurrentTime());
+			int i = empMapper.updateByExampleSelective(emply, example);
+			emp.setId(emply.getId());
+			emp.setEmail(email);
+			emp.setpToken(pToken);
+			if (i > 0) {
+				jsonResService.successResponse();
+				objArray.add(jsonResService.createEmployeeJson(emply));
+				jsonResService.setData(objArray);
+			} else {
+				jsonResService.errorResponse("invalid response");
+			}
 		} else {
-			jsonResService.errorResponse("invalid response");
+			jsonResService.errorResponse("user not exist");
 		}
+		objArray.clear();
 	}
 
 	public void pwdVerify(Employee employee) {
 		EmployeeExample example = new EmployeeExample();
-		example.createCriteria().andEmailEqualTo(employee.getEmail()).andPTokenEqualTo(employee.getpToken());
+		example.createCriteria().andIdEqualTo(employee.getId()).andPTokenEqualTo(employee.getpToken());
 		List<Employee> employeeList = empMapper.selectByExample(example);
 		if (employeeList.size() > 0) {
 			employee = employeeList.get(0);
 			if (employee.getpExpireAt() >= reqres.getCurrentTime()) {
-				example.createCriteria().andEmailEqualTo(employee.getEmail());
-				employee.setStatus(false);
+				example.createCriteria().andIdEqualTo(emp.getId());
+				employee.setPassword(emp.getPassword());
 				employee.setUpdated(new Date().getTime() / 1000);
-				empMapper.updateByExampleSelective(employee, example);
-				objArray.add(jsonResService.createEmployeeJson(employee));
-				jsonResService.setData(objArray);
-//				jsonResService.setData(jsonResService.createEmployeeJson(employee));
-				jsonResService.successResponse();
+				int i = empMapper.updateByExampleSelective(employee, example);
+				if (i > 0) {
+					objArray.add(jsonResService.createEmployeeJson(employee));
+					jsonResService.setData(objArray);
+					jsonResService.successResponse();
+				} else {
+					jsonResService.errorResponse("Please try again");
+				}
+
 			} else {
 				jsonResService.errorResponse("your password is expire please reset your password again.");
 			}
 		} else {
 			jsonResService.errorResponse("your id or token is not correct");
 		}
-	}	
+		objArray.clear();
+	}
 }
