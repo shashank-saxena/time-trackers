@@ -181,5 +181,19 @@ public class TTUtil {
 		calender.set(Calendar.MINUTE, min);
 		return calender.getTimeInMillis();
 	}
+	
+	public int getExcelSheetDate(Long workDate){
+		SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");		
+		String dateString = formatter.format(workDate);
+		Calendar cal = Calendar.getInstance();		
+		try {
+			Date date = formatter.parse(dateString);
+			cal.setTime(date);
+			return cal.get(Calendar.DAY_OF_MONTH);
+		} catch (ParseException e) {			
+			e.printStackTrace();			
+			return 38;
+		}
+	}
 
 }

@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.TimeZone;
 
 import org.apache.poi.hssf.usermodel.HSSFFont;
+import org.apache.poi.hssf.usermodel.HSSFFormulaEvaluator;
 import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
@@ -65,14 +66,9 @@ public class ExcelTimeSheet {
 		empMap.put("name", getEmpName(emp_id));
 
 		sheet.setColumnWidth(8, 20000);
-		sheet.setColumnWidth(0, 3000);
-		sheet.setColumnWidth(7, 3000);
-
 		createSheetStructure(sheet, workbook, empMap);
 		getTimeSheetData(sheet, emp_id, util.getMonthlyDate(monthName, year).get("minDate"),
 				util.getMonthlyDate(monthName, year).get("maxDate"), "excelExport", workbook);
-
-		rowCount = 5;
 
 		try {
 			FileOutputStream outStream = new FileOutputStream(new File("H:/timeSheet.xls"));
@@ -85,31 +81,45 @@ public class ExcelTimeSheet {
 		}
 	}
 
-	int rowCount = 5;
-
 	public void insertRow(DateSheet dateSheet, HSSFSheet sheet, HashMap<String, Long> map, String totalHours,
-			Workbook wb) {
-		HSSFRow aRow = sheet.createRow(rowCount++);
-
-		SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
-		String dateString = formatter.format(dateSheet.getWorkDate());
+			Workbook workbook) {
+		int rowCount = util.getExcelSheetDate(dateSheet.getWorkDate()) + 4;
+		HSSFRow aRow = sheet.createRow(rowCount);
 		String formulaString = "C" + rowCount + "-B" + rowCount + "+E" + rowCount + "-D" + rowCount + "+G" + rowCount
-				+ "-F" + rowCount + "";
-		aRow.createCell(0).setCellValue(dateString);
-		aRow.createCell(1).setCellValue(util.timeHrs(map.get("in")));
+				+ "-F" + rowCount;
 
+		// create style for row date
+		CellStyle dateStyle = workbook.createCellStyle();
+		dateStyle.setAlignment(CellStyle.ALIGN_CENTER);
+
+		// create style for row cells
+		CellStyle style = workbook.createCellStyle();
+		CreationHelper createHelper = workbook.getCreationHelper();
+		style.setDataFormat(createHelper.createDataFormat().getFormat("hh:mm"));
+		style.setAlignment(CellStyle.ALIGN_RIGHT);
+
+		aRow.createCell(0).setCellValue(util.getExcelSheetDate(dateSheet.getWorkDate()));
+		aRow.getCell(0).setCellStyle(dateStyle);
+		aRow.createCell(1).setCellValue(util.timeHrs(map.get("in")));
+		aRow.getCell(1).setCellStyle(style);
 		if (util.timeHrs(map.get("lunchIn")).equals("") && util.timeHrs(map.get("lunchOut")).equals("")) {
 			aRow.createCell(2).setCellValue(util.timeHrs(map.get("out")));
+			aRow.getCell(2).setCellStyle(style);
 		} else {
 			aRow.createCell(2).setCellValue(util.timeHrs(map.get("lunchIn")));
+			aRow.getCell(2).setCellStyle(style);
 			aRow.createCell(3).setCellValue(util.timeHrs(map.get("lunchOut")));
+			aRow.getCell(3).setCellStyle(style);
 			aRow.createCell(4).setCellValue(util.timeHrs(map.get("out")));
+			aRow.getCell(4).setCellStyle(style);
 		}
 		aRow.createCell(5).setCellValue(util.timeHrs(map.get("nightIn")));
+		aRow.getCell(5).setCellStyle(style);
 		aRow.createCell(6).setCellValue(util.timeHrs(map.get("nightOut")));
+		aRow.getCell(6).setCellStyle(style);
 		// aRow.createCell(7).setCellValue(totalHours);
-		// aRow.createCell(7).setCellType(HSSFCell.CELL_TYPE_FORMULA);
 		aRow.createCell(7).setCellFormula(formulaString);
+		aRow.getCell(7).setCellStyle(style);
 		aRow.createCell(8).setCellValue(dateSheet.getWorkDesc());
 	}
 
@@ -191,18 +201,16 @@ public class ExcelTimeSheet {
 		sheet.addMergedRegion(new CellRangeAddress(2, 2, 3, 6));
 		aRow3.createCell(3).setCellValue(empMap.get("year"));
 
-		HSSFRow aRow4 = sheet.createRow(38);
-		sheet.addMergedRegion(new CellRangeAddress(38, 38, 1, 6));
+		HSSFRow aRow4 = sheet.createRow(37);
+		sheet.addMergedRegion(new CellRangeAddress(37, 37, 1, 6));
 		aRow4.createCell(1).setCellValue("TOTAL HOURS");
 		aRow4.createCell(7).setCellValue("Hours");
+		
+		// create style for header cells
 		CellStyle style = workbook.createCellStyle();
 		Font font = workbook.createFont();
-		font.setFontName("Arial");
-		style.setFillForegroundColor(HSSFColor.BLUE.index);
-		style.setFillPattern(CellStyle.SOLID_FOREGROUND);
 		style.setAlignment(CellStyle.ALIGN_CENTER);
 		font.setBoldweight(HSSFFont.BOLDWEIGHT_BOLD);
-		font.setColor(HSSFColor.WHITE.index);
 		style.setFont(font);
 
 		// create header row
@@ -226,12 +234,21 @@ public class ExcelTimeSheet {
 		header.createCell(8).setCellValue("PROJECT");
 		header.getCell(8).setCellStyle(style);
 
-		for (int i = 5; i < 37; i++) {
-			HSSFRow row = sheet.createRow(i);
-			row.createCell(0).setCellValue(i - 5);
-			row.createCell(7).setCellValue("0.00");
-		}
+		// create style for row date
+		CellStyle dateStyle = workbook.createCellStyle();
+		dateStyle.setAlignment(CellStyle.ALIGN_CENTER);
 
+		// create style for row date
+		CellStyle hourStyle = workbook.createCellStyle();
+		hourStyle.setAlignment(CellStyle.ALIGN_RIGHT);
+
+		for (int i = 5; i < 36; i++) {
+			HSSFRow row = sheet.createRow(i);
+			row.createCell(0).setCellValue(i - 4);
+			row.getCell(0).setCellStyle(dateStyle);
+			row.createCell(7).setCellValue("0.00");
+			row.getCell(7).setCellStyle(hourStyle);
+		}
 	}
 
 	public String calculateTotalHours(HashMap<String, Long> map) {

@@ -168,15 +168,21 @@ public class EmpController {
 	@Produces(MediaType.APPLICATION_JSON)
 	public JSONObject excelExport(@FormParam("empId") String emp_id, @FormParam("month") String monthName,
 			@FormParam("year") String year) {
-		excelTimeSheet.createExcelSheet(Integer.parseInt(emp_id), monthName, year);
+		if (emp_id != null && !emp_id.equalsIgnoreCase("")) {
+			if (monthName != null && !monthName.equalsIgnoreCase("")) {
+				excelTimeSheet.createExcelSheet(Integer.parseInt(emp_id), monthName, year);
+			} else {
+				jsonResService.errorResponse("Please provide the month to select data");
+			}
+		} else {
+			jsonResService.errorResponse("Please provide employee id to select data");
+		}
 		return jsonResService.responseSender();
 	}
 
 	@Path("/pwdVerify")
 	@POST
 	@Produces(MediaType.APPLICATION_JSON)
-	// public JSONObject passwordVerification(@FormParam("email") String
-	// emailId, @FormParam("pToken") String pToken) {
 	public JSONObject passwordVerification(@FormParam("empId") int empId, @FormParam("pToken") String pToken,
 			@FormParam("newPassword") String newPwd) {
 		if (empId > 0) {
@@ -200,13 +206,16 @@ public class EmpController {
 	@Path("/monthlyExcel")
 	@POST
 	@Produces(MediaType.APPLICATION_JSON)
-	public JSONObject monthlyExcel(@FormParam("month") String monthName, @FormParam("empId") int emp_id,
+	public JSONObject monthlyExcel(@FormParam("month") String monthName, @FormParam("empId") String emp_id,
 			@FormParam("year") String year) {
-		if (monthName != null && !monthName.equalsIgnoreCase("")) {
-			// timeSchedual.toCheck();
-			excel.monthSheet(monthName, emp_id, year);
+		if (emp_id != null && !emp_id.equalsIgnoreCase("")) {
+			if (monthName != null && !monthName.equalsIgnoreCase("")) {
+				excel.monthSheet(monthName, Integer.parseInt(emp_id), year);
+			} else {
+				jsonResService.errorResponse("Please provide the month to select data");
+			}
 		} else {
-			jsonResService.errorResponse("Please provide the month to select data");
+			jsonResService.errorResponse("Please provide employee id to select data");
 		}
 
 		return jsonResService.responseSender();
