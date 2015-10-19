@@ -39,6 +39,7 @@ public class EmpService {
 	ArrayList<JSONObject> objArray = new ArrayList<JSONObject>();
 
 	public void addUser(Employee employee) {
+		objArray.clear();
 		int i = 0;
 		if (employee.getEmail() != null && !employee.getEmail().equalsIgnoreCase("")
 				&& util.mailFormat(employee.getEmail())) {
@@ -81,10 +82,10 @@ public class EmpService {
 		} else {
 			jsonResService.errorResponse("Mail id should be valid");
 		}
-		objArray.clear();
 	}
 
 	public void mailVerify(Employee employee) {
+		objArray.clear();
 		EmployeeExample example = new EmployeeExample();
 		example.createCriteria().andEmailEqualTo(employee.getEmail()).andVTokenEqualTo(employee.getvToken());
 		List<Employee> employeeList = empMapper.selectByExample(example);
@@ -101,11 +102,10 @@ public class EmpService {
 		} else {
 			jsonResService.errorResponse("your id or token is not correct");
 		}
-		objArray.clear();
 	}
 
 	public void resetPassword(String email, String pToken) {
-
+		objArray.clear();
 		EmployeeExample example = new EmployeeExample();
 		example.createCriteria().andEmailEqualTo(email);
 
@@ -130,10 +130,10 @@ public class EmpService {
 		} else {
 			jsonResService.errorResponse("user not exist");
 		}
-		objArray.clear();
 	}
 
 	public void pwdVerify(Employee employee) {
+		objArray.clear();
 		EmployeeExample example = new EmployeeExample();
 		example.createCriteria().andIdEqualTo(employee.getId()).andPTokenEqualTo(employee.getpToken());
 		List<Employee> employeeList = empMapper.selectByExample(example);
@@ -158,6 +158,5 @@ public class EmpService {
 		} else {
 			jsonResService.errorResponse("your id or token is not correct");
 		}
-		objArray.clear();
 	}
 }
