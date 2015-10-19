@@ -83,8 +83,8 @@ public class LoginService {
 				}
 			}
 		}
-	}	
-	
+	}
+
 	public boolean loginSessionFilter(String token) {
 		int i = 0;
 		SessionExample sessionExample = new SessionExample();
@@ -109,11 +109,31 @@ public class LoginService {
 				} else {
 					jsonResService.errorResponse("token is not update");
 					return false;
-				}				
+				}
 			} else {
 				jsonResService.errorResponse("token is expired please login again");
 				return false;
 			}
 		}
-	}	
+	}
+
+	public void signOut(int emp_id) {
+		int i = 0;
+		SessionExample sessionExample = new SessionExample();
+		sessionExample.createCriteria().andEmpIdEqualTo(emp_id);
+		List<Session> sessionList = sessionMapper.selectByExample(sessionExample);
+		if (sessionList.isEmpty()) {
+			jsonResService.errorResponse("employee not found");
+		} else {
+			Session localSession = sessionList.get(0);
+			localSession.setExpiresWhen(getCurrentTime());
+			i = sessionMapper.updateByExample(localSession, sessionExample);					
+			if (i > 0) {
+				jsonResService.successResponse();
+				jsonResService.setDataValue("User succefully signout : " + localSession.getEmpName(), "");				
+			} else {
+				jsonResService.errorResponse("user can not sign out");				
+			}
+		}
+	}
 }

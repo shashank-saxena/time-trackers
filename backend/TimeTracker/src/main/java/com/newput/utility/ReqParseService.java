@@ -69,17 +69,6 @@ public class ReqParseService {
 		}
 	}
 
-	// public void setVerificationKey(boolean p_status, String pToken, String
-	// role) {
-	// public void setVerificationKey(String email, String newPassword,String
-	// pToken) {
-	// emp.setPasswordVerification(true);
-	// emp.setpExpireAt(getCurrentTime() + 86400);
-	// emp.setPassword(newPassword);
-	// emp.setpToken(pToken);
-	// emp.setEmail(email);
-	// }
-
 	public void setSessionValue(String email, String password, String token) {
 		try {
 			emp.setEmail(email);

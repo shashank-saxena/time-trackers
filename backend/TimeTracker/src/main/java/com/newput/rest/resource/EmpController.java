@@ -221,7 +221,12 @@ public class EmpController {
 	public void emailValidation() {
 	}
 
-	public void signOut() {
+	@Path("/signOut")
+	@POST
+	@Produces(MediaType.APPLICATION_JSON)
+	public JSONObject signOut(@FormParam("empId") String emp_id) {
+		loginService.signOut(Integer.parseInt(emp_id));
+		return jsonResService.responseSender();
 	}
 
 }
