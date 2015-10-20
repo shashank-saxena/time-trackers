@@ -47,8 +47,8 @@ public class EmpService {
 				if (employee.getContact() != null && !employee.getContact().equalsIgnoreCase("")) {
 					if (employee.getFirstName() != null && !employee.getFirstName().equalsIgnoreCase("")) {
 						if (employee.getLastName() != null && !employee.getLastName().equalsIgnoreCase("")) {
-							if (employee.getDob() != null) {
-								if (employee.getDoj() != null) {
+							if (employee.getDob() != null && util.dateValidation(emp.getDob())) {
+								if (employee.getDoj() != null && util.dateValidation(emp.getDoj())) {
 									if (employee.getGender() != null && !employee.getGender().equalsIgnoreCase("")) {
 										i = empMapper.insertSelective(employee);
 										if (i > 0) {
@@ -62,10 +62,10 @@ public class EmpService {
 										jsonResService.errorResponse("Please fill your gender");
 									}
 								} else {
-									jsonResService.errorResponse("please fill your date of joining");
+									jsonResService.errorResponse("please fill correct date of joining");
 								}
 							} else {
-								jsonResService.errorResponse("please fill your dob");
+								jsonResService.errorResponse("please fill correct dob");
 							}
 						} else {
 							jsonResService.errorResponse("Last name can not be null");
@@ -104,8 +104,9 @@ public class EmpService {
 		}
 	}
 
-	public void resetPassword(String email, String pToken) {
+	public void resetPassword(String email, String Token, String flag) {
 		objArray.clear();
+		int i = 0;
 		EmployeeExample example = new EmployeeExample();
 		example.createCriteria().andEmailEqualTo(email);
 
@@ -113,13 +114,23 @@ public class EmpService {
 		if (empl.size() > 0) {
 			Employee emply = new Employee();
 			emply = empl.get(0);
-			emply.setpToken(pToken);
-			emply.setpExpireAt(reqres.getCurrentTime() + 30);
-			emply.setUpdated(reqres.getCurrentTime());
-			int i = empMapper.updateByExampleSelective(emply, example);
-			emp.setId(emply.getId());
-			emp.setEmail(email);
-			emp.setpToken(pToken);
+			if (flag.equalsIgnoreCase("password")) {
+				emply.setpToken(Token);
+				emply.setpExpireAt(reqres.getCurrentTime() + 30);
+				emply.setUpdated(reqres.getCurrentTime());
+				i = empMapper.updateByExampleSelective(emply, example);
+				emp.setId(emply.getId());
+				emp.setEmail(email);
+				emp.setpToken(Token);
+			} else if (flag.equalsIgnoreCase("registration")) {
+				emply.setvToken(Token);
+				emply.setStatus(false);
+				emply.setUpdated(reqres.getCurrentTime());
+				i = empMapper.updateByExampleSelective(emply, example);
+				emp.setId(emply.getId());
+				emp.setEmail(email);
+				emp.setvToken(Token);
+			}
 			if (i > 0) {
 				jsonResService.successResponse();
 				objArray.add(jsonResService.createEmployeeJson(emply));

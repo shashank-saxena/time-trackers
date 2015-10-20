@@ -15,7 +15,7 @@ import com.newput.domain.Employee;
  *         is @Autowired with bean defined in the applicationContext.xml
  */
 @Service
-public class VerificationMailSend {
+public class EMailSender {
 
 	@Autowired
 	private JavaMailSender mailSender;
@@ -32,7 +32,7 @@ public class VerificationMailSend {
 			email.setText("Welcome, You are successfully register Please click here http://tracker/login?ET="
 					+ emp.getvToken());
 
-		} else if (module.equalsIgnoreCase("resetPassword")) {
+		} else if (module.equalsIgnoreCase("password")) {
 			email.setText("Welcome, Please confirm your mail id. click here http://tracker/login?PT=" + emp.getpToken()
 					+ "&id=" + emp.getId());
 		}

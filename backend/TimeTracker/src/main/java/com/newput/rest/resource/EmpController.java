@@ -19,7 +19,7 @@ import com.newput.utility.ExcelTimeSheet;
 import com.newput.utility.JsonResService;
 import com.newput.utility.ReqParseService;
 import com.newput.utility.TTUtil;
-import com.newput.utility.VerificationMailSend;
+import com.newput.utility.EMailSender;
 
 /**
  * Description : Use as a controller class to pass control on the services
@@ -47,7 +47,7 @@ public class EmpController {
 	private Employee emp;
 
 	@Autowired
-	private VerificationMailSend emailSend;
+	private EMailSender emailSend;
 
 	@Autowired
 	private ReqParseService reqParser;
@@ -64,7 +64,7 @@ public class EmpController {
 	/**
 	 * @POST Description : Use to add new user into the system and send the
 	 *       validation email to the registered mail id
-	 *       {@link VerificationMailSend}
+	 *       {@link EMailSender}
 	 */
 	@Path("/register")
 	@POST
@@ -152,9 +152,9 @@ public class EmpController {
 
 		if (email != null && !email.equalsIgnoreCase("") && util.mailFormat(email)) {
 			String ptoken = util.generateRandomString();
-			empService.resetPassword(email, ptoken);
+			empService.resetPassword(email, ptoken, "password");
 			if (jsonResService.isSuccess()) {
-				emailSend.sendMail("resetPassword");
+				emailSend.sendMail("password");
 			}
 		} else {
 			jsonResService.errorResponse("Mail id can not be null and in proper format");
@@ -164,7 +164,6 @@ public class EmpController {
 
 	@Path("/excelExport")
 	@POST
-	// @Produces("application/vnd.ms-excel")
 	@Produces(MediaType.APPLICATION_JSON)
 	public JSONObject excelExport(@FormParam("empId") String emp_id, @FormParam("month") String monthName,
 			@FormParam("year") String year) {
@@ -224,13 +223,24 @@ public class EmpController {
 	public void email() {
 	}
 
-	public void excelExport() {
-	}
-
-	public void editDetail() {
-	}
-
-	public void emailValidation() {
+	@Path("/resend")
+	@POST
+	@Produces(MediaType.APPLICATION_JSON)
+	public JSONObject resendMail(@FormParam("email") String email, @FormParam("flag") String flag) {
+		if (email != null && !email.equalsIgnoreCase("") && util.mailFormat(email)) {
+			if (flag != null && !flag.equalsIgnoreCase("")) {
+				String token = util.generateRandomString();
+				empService.resetPassword(email, token,flag);
+				if (jsonResService.isSuccess()) {
+					emailSend.sendMail(flag);
+				}
+			} else {
+				jsonResService.errorResponse("Flag is must");
+			}
+		} else {
+			jsonResService.errorResponse("Email id not valid");
+		}
+		return jsonResService.responseSender();
 	}
 
 	@Path("/signOut")

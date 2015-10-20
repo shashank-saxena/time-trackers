@@ -85,7 +85,7 @@ public class ReqParseService {
 		emp.setUpdated(getCurrentTime());
 	}
 
-	public void setPValidationValue(int emp_id, String token,String password) {
+	public void setPValidationValue(int emp_id, String token, String password) {
 		emp.setPassword(password);
 		emp.setId(emp_id);
 		emp.setpToken(token);
