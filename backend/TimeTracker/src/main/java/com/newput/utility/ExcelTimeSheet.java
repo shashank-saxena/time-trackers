@@ -10,12 +10,9 @@ import java.util.List;
 import java.util.TimeZone;
 
 import org.apache.poi.hssf.usermodel.HSSFFont;
-import org.apache.poi.hssf.usermodel.HSSFFormulaEvaluator;
 import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
-import org.apache.poi.hssf.util.HSSFColor;
-import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.CreationHelper;
 import org.apache.poi.ss.usermodel.Font;
@@ -84,7 +81,7 @@ public class ExcelTimeSheet {
 	public void insertRow(DateSheet dateSheet, HSSFSheet sheet, HashMap<String, Long> map, String totalHours,
 			Workbook workbook) {
 		int rowCount = util.getExcelSheetDate(dateSheet.getWorkDate()) + 4;
-		HSSFRow aRow = sheet.createRow(rowCount);
+		HSSFRow aRow = sheet.createRow(rowCount - 1);
 		String formulaString = "C" + rowCount + "-B" + rowCount + "+E" + rowCount + "-D" + rowCount + "+G" + rowCount
 				+ "-F" + rowCount;
 
@@ -117,7 +114,6 @@ public class ExcelTimeSheet {
 		aRow.getCell(5).setCellStyle(style);
 		aRow.createCell(6).setCellValue(util.timeHrs(map.get("nightOut")));
 		aRow.getCell(6).setCellStyle(style);
-		// aRow.createCell(7).setCellValue(totalHours);
 		aRow.createCell(7).setCellFormula(formulaString);
 		aRow.getCell(7).setCellStyle(style);
 		aRow.createCell(8).setCellValue(dateSheet.getWorkDesc());
@@ -185,6 +181,14 @@ public class ExcelTimeSheet {
 
 	public void createSheetStructure(HSSFSheet sheet, HSSFWorkbook workbook, HashMap<String, String> empMap) {
 
+		// create style for header cells
+		CellStyle style = workbook.createCellStyle();
+		Font font = workbook.createFont();
+		style.setAlignment(CellStyle.ALIGN_CENTER);
+		style.getDataFormat();
+		font.setBoldweight(HSSFFont.BOLDWEIGHT_BOLD);
+		style.setFont(font);
+
 		HSSFRow aRow1 = sheet.createRow(0);
 		sheet.addMergedRegion(new CellRangeAddress(0, 0, 1, 2));
 		aRow1.createCell(1).setCellValue("Name");
@@ -204,14 +208,8 @@ public class ExcelTimeSheet {
 		HSSFRow aRow4 = sheet.createRow(37);
 		sheet.addMergedRegion(new CellRangeAddress(37, 37, 1, 6));
 		aRow4.createCell(1).setCellValue("TOTAL HOURS");
-		aRow4.createCell(7).setCellValue("Hours");
-		
-		// create style for header cells
-		CellStyle style = workbook.createCellStyle();
-		Font font = workbook.createFont();
-		style.setAlignment(CellStyle.ALIGN_CENTER);
-		font.setBoldweight(HSSFFont.BOLDWEIGHT_BOLD);
-		style.setFont(font);
+		aRow4.createCell(7).setCellFormula("SUM(H6:H36)");
+		aRow4.getCell(7).setCellStyle(style);
 
 		// create header row
 		HSSFRow header = sheet.createRow(4);
@@ -246,7 +244,7 @@ public class ExcelTimeSheet {
 			HSSFRow row = sheet.createRow(i);
 			row.createCell(0).setCellValue(i - 4);
 			row.getCell(0).setCellStyle(dateStyle);
-			row.createCell(7).setCellValue("0.00");
+			row.createCell(7).setCellValue("0:00");
 			row.getCell(7).setCellStyle(hourStyle);
 		}
 	}

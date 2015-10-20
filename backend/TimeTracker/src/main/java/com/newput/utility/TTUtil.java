@@ -85,19 +85,19 @@ public class TTUtil {
 			Calendar calendar = Calendar.getInstance();
 			Date today = new Date(timeValue);
 			calendar.setTime(today);
-			String hours = ""+calendar.get(Calendar.HOUR_OF_DAY);
-			if(hours.length() == 1){
-				hours = "0"+hours;
+			String hours = "" + calendar.get(Calendar.HOUR_OF_DAY);
+			if (hours.length() == 1) {
+				hours = "0" + hours;
 			}
-			String minute = ""+calendar.get(Calendar.MINUTE);
-			if(minute.length() == 1){
-				minute = minute+"0";
+			String minute = "" + calendar.get(Calendar.MINUTE);
+			if (minute.length() == 1) {
+				minute = minute + "0";
 			}
 			String timeSlot = hours + ":" + minute;
 			return timeSlot;
 		} catch (Exception e) {
-			return "";			
-		}		
+			return "";
+		}
 	}
 
 	/**
@@ -181,18 +181,54 @@ public class TTUtil {
 		calender.set(Calendar.MINUTE, min);
 		return calender.getTimeInMillis();
 	}
-	
-	public int getExcelSheetDate(Long workDate){
-		SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");		
+
+	public int getExcelSheetDate(Long workDate) {
+		SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
 		String dateString = formatter.format(workDate);
-		Calendar cal = Calendar.getInstance();		
+		Calendar cal = Calendar.getInstance();
 		try {
 			Date date = formatter.parse(dateString);
 			cal.setTime(date);
 			return cal.get(Calendar.DAY_OF_MONTH);
-		} catch (ParseException e) {			
-			e.printStackTrace();			
+		} catch (ParseException e) {
+			e.printStackTrace();
 			return 38;
+		}
+	}
+
+	public boolean dateValidation(Date date) {
+		try {
+
+			SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
+			String dateString = formatter.format(date);
+			System.out.println("dateString::"+dateString);
+			String delims = "-";
+			String[] tokens = dateString.split(delims);
+			String dated = tokens[0];
+			String month = tokens[1];
+			String year = tokens[2];
+			Calendar now = Calendar.getInstance();
+			int year1 = now.get(Calendar.YEAR);
+			if (dated.length() == 2) {
+				if (month.length() == 2) {
+					if (year.length() == 4) {
+						if (Integer.parseInt(year) > 1945 && Integer.parseInt(year) <= year1) {
+							return true;
+						} else {
+							return false;
+						}
+					} else {
+						return false;
+					}
+				} else {
+					return false;
+				}
+			} else {
+				return false;
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			return false;
 		}
 	}
 
