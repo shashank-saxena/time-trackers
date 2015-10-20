@@ -1,5 +1,0 @@
-#java class file ignore
-*.class
-
-/target/*
-/target/
