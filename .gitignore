@@ -1,0 +1,10 @@
+
+backend/TimeTracker/target/*
+**/.DS_Store
+.DS_Store
+
+backend/TimeTracker/.settings 
+backend/TimeTracker/.classpath
+backend/TimeTracker/.project
+
+Web/TimeTracker/.project
