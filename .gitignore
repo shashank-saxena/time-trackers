@@ -3,9 +3,14 @@ backend/TimeTracker/target/*
 **/.DS_Store
 .DS_Store
 
+backend/.DS_Store
+backend/TimeTracker/.DS_Store
 backend/TimeTracker/.settings 
 backend/TimeTracker/.classpath
 backend/TimeTracker/.project
 
+Web/.DS_Store
+Web/TimeTracker/.DS_Store
+Web/TimeTracker/.project
 Web/TimeTracker/bower_components/*
 Web/TimeTracker/node_modules/*
