@@ -2,6 +2,7 @@ package com.newput.utility;
 
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -52,7 +53,14 @@ public class ExcelTimeSheet {
 	@Autowired
 	Employee employee;
 
-	public void createExcelSheet(int emp_id, String monthName, String year) {
+	public File createExcelSheet(int emp_id, String monthName, String year) {
+	
+		File temp = null;
+	    try {
+			temp = File.createTempFile("tempfile", ".xls");
+		} catch (IOException e1) {
+			e1.printStackTrace();
+		} 
 
 		HSSFWorkbook workbook = new HSSFWorkbook();
 		HSSFSheet sheet = workbook.createSheet("Time_Sheet");
@@ -68,14 +76,16 @@ public class ExcelTimeSheet {
 				util.getMonthlyDate(monthName, year).get("maxDate"), "excelExport", workbook);
 
 		try {
-			FileOutputStream outStream = new FileOutputStream(new File("H:/timeSheet.xls"));
+			//FileOutputStream outStream = new FileOutputStream(new File("C:/Users/ashu/Downloads/demo/timeSheet.xls"));
+			FileOutputStream outStream = new FileOutputStream(temp);
 			workbook.write(outStream);
 			outStream.close();
-			jsonResService.setDataValue("timeSheet.xls file written successfully on disk.", "");
+			//jsonResService.setDataValue("timeSheet.xls file written successfully on disk.", "");
 			jsonResService.successResponse();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		return temp;
 	}
 
 	public void insertRow(DateSheet dateSheet, HSSFSheet sheet, HashMap<String, Long> map, String totalHours,
@@ -272,9 +282,14 @@ public class ExcelTimeSheet {
 	}
 
 	public String getEmpName(int empId) {
-		employee = employeeMapper.selectByPrimaryKey(empId);
+		employee = employeeMapper.selectByPrimaryKey(empId);		
 		String fName = Character.toUpperCase(employee.getFirstName().charAt(0)) + employee.getFirstName().substring(1);
 		String lName = Character.toUpperCase(employee.getLastName().charAt(0)) + employee.getLastName().substring(1);
 		return fName + " " + lName;
+	}
+	
+	public String getEmpEmail(int empId) {
+		employee = employeeMapper.selectByPrimaryKey(empId);
+		return employee.getEmail();
 	}
 }

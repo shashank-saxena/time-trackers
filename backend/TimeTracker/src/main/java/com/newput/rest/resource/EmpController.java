@@ -1,5 +1,7 @@
 package com.newput.rest.resource;
 
+import java.io.File;
+
 import javax.ws.rs.FormParam;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
@@ -164,6 +166,7 @@ public class EmpController {
 
 	@Path("/excelExport")
 	@POST
+	//@Produces("application/vnd.ms-excel")
 	@Produces(MediaType.APPLICATION_JSON)
 	public JSONObject excelExport(@FormParam("empId") String emp_id, @FormParam("month") String monthName,
 			@FormParam("year") String year) {
@@ -176,7 +179,7 @@ public class EmpController {
 		} else {
 			jsonResService.errorResponse("Please provide employee id to select data");
 		}
-		return jsonResService.responseSender();
+		return jsonResService.responseSender();		
 	}
 
 	@Path("/pwdVerify")
@@ -220,7 +223,25 @@ public class EmpController {
 		return jsonResService.responseSender();
 	}
 
-	public void email() {
+	@Path("/mailExcelSheet")
+	@POST
+	@Produces(MediaType.APPLICATION_JSON)
+	public JSONObject mailExcelSheet(@FormParam("empId") String emp_id, @FormParam("month") String monthName,
+			@FormParam("year") String year) {
+		if (emp_id != null && !emp_id.equalsIgnoreCase("")) {
+			if (monthName != null && !monthName.equalsIgnoreCase("")) {
+				File file = excelTimeSheet.createExcelSheet(Integer.parseInt(emp_id), monthName, year);
+				if (jsonResService.isSuccess()) {
+					emailSend.sendExcelSheet(excelTimeSheet.getEmpEmail(Integer.parseInt(emp_id)), file);
+					file.delete();
+				}
+			} else {
+				jsonResService.errorResponse("Please provide the month to select data");
+			}
+		} else {
+			jsonResService.errorResponse("Please provide employee id to select data");
+		}
+		return jsonResService.responseSender();
 	}
 
 	@Path("/resend")
