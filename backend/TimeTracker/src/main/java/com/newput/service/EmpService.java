@@ -7,9 +7,11 @@ import java.util.List;
 import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 
 import com.newput.domain.Employee;
 import com.newput.domain.EmployeeExample;
+import com.newput.domain.TrackerException;
 import com.newput.mapper.EmployeeMapper;
 import com.newput.utility.JsonResService;
 import com.newput.utility.ReqParseService;
@@ -38,6 +40,7 @@ public class EmpService {
 	private Employee emp;
 	ArrayList<JSONObject> objArray = new ArrayList<JSONObject>();
 
+	@ExceptionHandler({ TrackerException.class })
 	public void addUser(Employee employee) {
 		objArray.clear();
 		int i = 0;
