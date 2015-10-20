@@ -3,7 +3,10 @@
 		<div class="row row-margin">
 		<div class="col-sm-3 col-xs-12"></div>
 		<div class="col-sm-6 col-xs-12 signup-form-container">
-			<form name="signup" class="form-horizontal loginform" role="form" novalidate="true">
+			
+			<h3>Sign-Up</h3>
+			<div class="border btom-mrgn"></div>
+			<form name="signup" class="form-horizontal loginform" role="form" novalidate="true" ng-submit="signup.$valid && signUp.userSignUp()">
 				<div class="form-group">
 					<div class="col-sm-6"> 
 						<label class="control-label" for="firstname">First Name*:</label>
@@ -32,8 +35,8 @@
 				</div>
 				<div class="form-group">
 					<div class="col-sm-6">
-					<label class="control-label" for="contact">Contact:</label>
-					<input type="number" ng-minlength="10" ng-maxlength="10"  class="form-control" ng-model="user.contact" name="contact"  required="" placeholder="Enter Contact">
+					<label class="control-label" for="contact">Contact*:</label>
+					<input type="number" ng-minlength="10" ng-maxlength="10"  class="form-control" ng-model="user.contact" name="contact" required=""  placeholder="Enter Contact">
 					<div ng-show="signup.$submitted || signup.contact.$touched">
 						<span class="error-message" ng-show="signup.contact.$error.required">Tell us your contact.</span>
 						<span class="error-message" ng-show="signup.contact.$error.number">This is not a valid contact no.</span>
@@ -41,44 +44,44 @@
 					</div>
 					<div class="col-sm-6">
 						<label class="control-label" for="address">Address:</label>
-						<input type="textarea" class="form-control" ng-model="user.address" name="address" placeholder="Enter Address">
+						<input type="textarea" class="form-control" ng-model="user.address" name="address"  placeholder="Enter Address">
 					</div>
 				</div>
 				<div class="form-group">
 					<div class="col-sm-6">
-						<label class="control-label" for="dateofbirth">Date Of Birth:</label>
-						<input type="date" class="form-control" ng-model="user.dateofbirth" name="dateofbirth" id="dob"required="" placeholder="Enter Date Of Birth">
-						<div ng-show="signup.$submitted || signup.dateofbirth.$touched">
-							<span class="error-message" ng-show="signup.dateofbirth.$error.required">Tell us Your Birthday Date</span>		
+						<label class="control-label" for="dateofbirth">Date Of Birth*:</label>
+						 <input type="text" name="dateofbirthday" ng-model="dateofbirth" id=dob  placeholder="Enter Date Of Birth">
+					</div>	
+					<div class="col-sm-6">
+						<label class="control-label" for="dateofjoining">Date of Joining*:</label>
+						 <input type="text" name="dateofjoining" ng-model="dateofjoining" id=doj  placeholder="Enter Date Of Joining">
+					</div>
+				</div>
+				<div class="form-group">
+					<div class="col-sm-6">
+						<label class="control-label" for="password">Password*:</label>
+						<input type="password" class="form-control" ng-model="user.password" id="password" name="password" required="" placeholder="Enter password">
+						<div ng-show="signup.$submitted || signup.password.$touched" >
+							<span ng-show="signup.password.$error.required">Tell us Your Password</span>
 						</div>
-					 </div>	
+					</div>
 					<div class="col-sm-6">
-						<label class="control-label" for="dateofjoining">Date of Joining:</label>
-						<input type="date" class="form-control" ng-model="user.daateofjoining" name="dateofjoining" id="doj" required="" placeholder="Enter Date Of Joining">
-						<div ng-show="signup.$submitted || signup.dateofjoining.$touched" >
-							<span class="error-message" ng-show="signup.dateofjoining.$error.required">Tell us Your Date of Joining</span>
-						</div>
+						<label class="control-label" for="confirmpassword">Confirm Password*:</label>
+						<input type="password" class="form-control"  ng-model="user.confirmpassword" id="confirmpassword" name="confirmpassword" required="" pw-check="user.password" placeholder="Enter password">
+						<div ng-show="signup.$submitted || signup.password.$touched || signup.password.$dirty">
+							<span ng-show="signup.confirmpassword.$error.required">Tell us Your Confirm Password</span>
+							<span ng-show="signup.confirmpassword.$error.pwCheck">Password are not equal!</span>
+						</div>						
 					</div>
 				</div>
-				<div class="form-group">
-					<div class="col-sm-6">
-						<label class="control-label" for="password">Password:</label>
-						<input type="password" class="form-control" ng-model="user.password" id="password" name="password" required placeholder="Enter password">
-					</div>
-					<div class="col-sm-6">
-						<label class="control-label" for="confirmpassword">Confirm Password:</label>
-						<input type="password" class="form-control"  ng-model="user.confirmpassword" id="confirmpassword" name="confirmpassword" match="user.password" required="" placeholder="Enter password">
-						<div ng-show="signup.confirmpassword.$error.match">Fields do not match!</div>
-					</div>
-				</div>
-				<div class="form-group">
-					<div class="col-sm-offset-4">
-						<button type="button" class="btn btn-default">Reset</button>
-						<button type="button" class="btn btn-default">Register</button>
-					</div>
-					<div class="col-sm-offset-4">
-						<a href=""> :- Back To Login Page </a>			      
-					</div>
+				<div class="border btom-mrgn"></div>
+				  <div class="form-group">
+					<div class="col-sm-offset-0">
+						<button type="button" class="btn btn-primary divider" ng-click="reset()">Reset</button>
+						<button type="submit" class="btn btn-primary divider">Register</button>
+						 <a href="/">  Back To Login Page </a>
+						  <a href="detailview">  detail view </a>
+					</div>	
 				</div>
 			</form>
 		</div>	
