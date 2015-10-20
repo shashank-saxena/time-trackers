@@ -37,3 +37,15 @@ input .ng-dirty.ng-invalid {
   border-radius: 8px;
   box-shadow: -1px -7px 31px -7px;
   padding: 21px; }
+
+.border .btom-mrgn {
+  border: solid 0.7px #ededed;
+  margin: 10px; }
+
+.divider {
+  margin: 10px;
+  height: auto;
+  display: inline-block; }
+
+.align-txt {
+  text-align: center; }

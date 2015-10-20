@@ -23,5 +23,8 @@
     "angular-route": "~1.4.7",
     "jquery": "~2.1.4"
   },
-  "private": true
+  "private": true,
+  "resolutions": {
+    "jquery": ">= 1.9.1"
+  }
 }
