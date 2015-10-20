@@ -7,4 +7,5 @@ backend/TimeTracker/.settings
 backend/TimeTracker/.classpath
 backend/TimeTracker/.project
 
-Web/TimeTracker/.project
+Web/TimeTracker/bower_components/*
+Web/TimeTracker/node_modules/*
