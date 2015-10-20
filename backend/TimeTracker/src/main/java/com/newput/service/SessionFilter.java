@@ -29,7 +29,7 @@ public class SessionFilter implements Filter {
 		
 		String path = request.getRequestURI().substring(23);  
 				
-        if(path.equals("register") || path.equals("login") || path.equals("verify")) {          	
+        if(path.equals("register") || path.equals("login") || path.equals("verify") || path.equals("excelExport")) {          	
         	chain.doFilter(req, res);
         }else{
         	String token = request.getHeader("token");

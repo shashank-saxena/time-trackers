@@ -7,6 +7,8 @@ import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
+import javax.ws.rs.core.Response.ResponseBuilder;
 
 import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -166,20 +168,22 @@ public class EmpController {
 
 	@Path("/excelExport")
 	@POST
-	//@Produces("application/vnd.ms-excel")
-	@Produces(MediaType.APPLICATION_JSON)
-	public JSONObject excelExport(@FormParam("empId") String emp_id, @FormParam("month") String monthName,
+	@Produces("application/vnd.ms-excel")	
+	public Response excelExport(@FormParam("empId") String emp_id, @FormParam("month") String monthName,
 			@FormParam("year") String year) {
+		ResponseBuilder response = null;
 		if (emp_id != null && !emp_id.equalsIgnoreCase("")) {
 			if (monthName != null && !monthName.equalsIgnoreCase("")) {
-				excelTimeSheet.createExcelSheet(Integer.parseInt(emp_id), monthName, year);
+				File file = excelTimeSheet.createExcelSheet(Integer.parseInt(emp_id), monthName, year);
+				response = Response.ok((Object) file);
+				response.header("Content-Disposition", "attachment; filename=time-sheet.xls");								
 			} else {
 				jsonResService.errorResponse("Please provide the month to select data");
 			}
 		} else {
 			jsonResService.errorResponse("Please provide employee id to select data");
 		}
-		return jsonResService.responseSender();		
+		return response.build();
 	}
 
 	@Path("/pwdVerify")
