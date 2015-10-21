@@ -29,11 +29,22 @@ footer {
   }
 }
 .form-wrap {
-  .login-form {
-    border-radius: 5px;
-    box-shadow: 3px 3px 10px 0;
-    padding: 50px;
+  border-radius: 5px;
+  box-shadow: 3px 3px 10px 0;
+  margin-top: 45px;
+  padding: 25px;
+  h2 {
+    margin: 0px;
   }
+  .login-form {
+    padding: 25px 0px;
+  }
+  &.forgot {
+    height: 200px;
+  }
+}
+.align-text {
+  text-align: left;
 }
 .section {
   padding: 30px;
@@ -50,7 +61,76 @@ footer {
   border-radius: 8px;
   box-shadow: -1px -7px 31px -7px;
   padding: 21px;
-  
+}
+.timesheet-container {
+  h3 {
+    margin: 0px;
+    padding: 0px;
+  }
+}
+.tt-table {
+  padding: 12px;
+  table {
+    width: 98%;
+  }
+}
+table {
+  tbody{
+     tr:nth-child(odd) {
+      background-color: #def;
+    }
+    tr:nth-child(even) {
+      background-color: #fff;
+    }
+  }
+}
+.container {
+  min-height: 520px;
+}
+.welcome-title {
+  .icon {
+    text-align: right;
+  }
+}
+.message {
+  color: #99C240;
+}
+.col-span {
+  text-align: right;
+}
+.help-icons {
+  div {
+    margin-top: 8px;
+  }
+}
+.seperator {
+  margin-top: -15px;
+  text-align: left;
+  margin-left: 97px;
+  span {
+    display: inline-block;
+    position: relative;
+  }
+  span:before {
+    margin-right: 15px;
+    right: 100%;
+  }
+  span:after {
+    left: 100%;
+    margin-left: 15px;
+  }
+  span:before,
+  span:after {
+    background: #757171;
+    content: "";
+    height: 1px;
+    position: absolute;
+    top: 50%;
+    width: 80px;
+  }
+}
+.error-message {
+  color: #ff0000;
 }
 .border {
   .btom-mrgn {
@@ -65,4 +145,17 @@ footer {
 }
 .align-txt {
     text-align:center; 
+}
+.img {
+  width: 15px;
+}
+.forgot-btn-container {
+  margin-top: 26px;
+  margin-left: -67px;
+}
+.input-email {
+  input {
+    height: 31px;
+    margin-top: 3px;
+  }
 }
