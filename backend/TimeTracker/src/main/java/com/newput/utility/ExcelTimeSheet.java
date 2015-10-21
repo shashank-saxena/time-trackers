@@ -54,13 +54,13 @@ public class ExcelTimeSheet {
 	Employee employee;
 
 	public File createExcelSheet(int emp_id, String monthName, String year) {
-	
+
 		File temp = null;
-	    try {
+		try {
 			temp = File.createTempFile("tempfile", ".xls");
 		} catch (IOException e1) {
 			e1.printStackTrace();
-		} 
+		}
 
 		HSSFWorkbook workbook = new HSSFWorkbook();
 		HSSFSheet sheet = workbook.createSheet("Time_Sheet");
@@ -89,7 +89,8 @@ public class ExcelTimeSheet {
 	public void insertRow(DateSheet dateSheet, HSSFSheet sheet, HashMap<String, Long> map, String totalHours,
 			Workbook workbook) {
 		int rowCount = util.getExcelSheetDate(dateSheet.getWorkDate()) + 4;
-		HSSFRow aRow = sheet.createRow(rowCount - 1);
+		HSSFRow aRow = sheet.getRow(rowCount);
+		rowCount = rowCount + 1;
 		String formulaString = "C" + rowCount + "-B" + rowCount + "+E" + rowCount + "-D" + rowCount + "+G" + rowCount
 				+ "-F" + rowCount;
 
@@ -180,8 +181,8 @@ public class ExcelTimeSheet {
 							dateSheetLocal.getWorkDate());
 					jsonArray.add(obj);
 				}
-				jsonResService.setData(jsonArray);
 			}
+			jsonResService.setData(jsonArray);
 		} else {
 			jsonResService.errorResponse("date not found in date sheet table for emp id");
 		}
@@ -280,12 +281,12 @@ public class ExcelTimeSheet {
 	}
 
 	public String getEmpName(int empId) {
-		employee = employeeMapper.selectByPrimaryKey(empId);		
+		employee = employeeMapper.selectByPrimaryKey(empId);
 		String fName = Character.toUpperCase(employee.getFirstName().charAt(0)) + employee.getFirstName().substring(1);
 		String lName = Character.toUpperCase(employee.getLastName().charAt(0)) + employee.getLastName().substring(1);
 		return fName + " " + lName;
 	}
-	
+
 	public String getEmpEmail(int empId) {
 		employee = employeeMapper.selectByPrimaryKey(empId);
 		return employee.getEmail();

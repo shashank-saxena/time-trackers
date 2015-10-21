@@ -38,7 +38,7 @@ public class LoginService {
 		return System.currentTimeMillis() / 1000;
 	}
 
-	public void createSession(Employee employee) {
+	public boolean createSession(Employee employee) {
 		int i = 0;
 		employee.setPassword(util.md5(employee.getPassword()));
 		EmployeeExample example = new EmployeeExample();
@@ -83,6 +83,7 @@ public class LoginService {
 				}
 			}
 		}
+		return true;
 	}
 
 	public boolean loginSessionFilter(String token) {

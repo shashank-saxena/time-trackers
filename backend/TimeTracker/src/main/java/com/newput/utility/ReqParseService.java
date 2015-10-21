@@ -99,7 +99,6 @@ public class ReqParseService {
 			long systime = wrkdate.getTime();
 			timeSheet.setCreated(getCurrentTime());
 			timeSheet.setWorkDate(systime);
-			System.out.println("emp_id::" + emp_id);
 			timeSheet.setEmpId(emp_id);
 			timeSheet.setChunkId(Integer.parseInt(chunkId));
 			if (in != null && !in.equalsIgnoreCase("")) {
