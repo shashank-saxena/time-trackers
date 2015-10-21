@@ -9,6 +9,7 @@ backend/TimeTracker/.settings
 backend/TimeTracker/.classpath
 backend/TimeTracker/.project
 backend/TimeTracker/.gitignore
+backend/TimeTracker/.settings/*
 
 Web/.DS_Store
 Web/Time\ tracker/.DS_Store

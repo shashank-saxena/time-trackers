@@ -4,13 +4,14 @@
 	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
         http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-3.0.xsd
         http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd
-        http://www.springframework.org/schema/jee http://www.springframework.org/schema/jee/spring-jee-3.0.xsd
-        http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-3.0.xsd">
+        http://www.springframework.org/schema/jee http://www.springframework.org/schema/jee/spring-jee-3.0.xsd        
+        http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-3.0.xsd
+        http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security.xsd">
 
 	<context:component-scan base-package="com.newput.domain" />
 	<context:component-scan base-package="com.newput.service" />
 	<context:component-scan base-package="com.newput.rest.resource" />
-	<context:component-scan base-package="com.newput.utility" />
+	<context:component-scan base-package="com.newput.utility" /> 
 	<context:annotation-config />
 	<context:property-placeholder location="classpath:status.properties" />
 
@@ -34,7 +35,7 @@
 	<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
 		<property name="dataSource" ref="dataSource" />
 		<!-- <property name="configLocation" value="classpath:config/mybatisV3.xml"/> -->
-		<property name="mapperLocations" value="classpath:*.xml" />
+		<property name="mapperLocations" value="classpath:*Mapper.xml" />
 	</bean>
 
 	<bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
@@ -56,7 +57,7 @@
 				<prop key="mail.smtp.port">587</prop>
 			</props>
 		</property>
-	</bean>	
+	</bean>
 
 	<!-- <bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer"> 
 		<property name="locations"> <list> <value>classpath:status.properties</value> 
