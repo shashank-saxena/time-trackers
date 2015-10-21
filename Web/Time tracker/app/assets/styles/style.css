@@ -45,7 +45,7 @@ input .ng-dirty.ng-invalid {
 .signup-form-container {
   border: 1px solid #fff;
   border-radius: 8px;
-  box-shadow: -1px -7px 31px -7px;
+  box-shadow: 1px -2px 22px -7px;
   padding: 21px; }
 
 .timesheet-container h3 {
@@ -100,9 +100,6 @@ table tbody tr:nth-child(even) {
     top: 50%;
     width: 80px; }
 
-.error-message {
-  color: #ff0000; }
-
 .border .btom-mrgn {
   border: solid 0.7px #ededed;
   margin: 10px; }
@@ -115,6 +112,24 @@ table tbody tr:nth-child(even) {
 .align-txt {
   text-align: center; }
 
+.error-message {
+  color: #ff0000; }
+
+.col-sm-12 .input-group {
+  margin-bottom: 10px; }
+
+@media screen and (max-width: 360px) {
+  .form-group .input-group .work-description {
+    width: 160px; } }
+
+@media screen and (min-width: 767px) {
+  .form-group .input-group .work-description {
+    width: 280px; } }
+
+@media screen and (min-width: 1024px) {
+  .form-group .input-group .work-description {
+    width: 490px; } }
+    
 .img {
   width: 15px; }
 

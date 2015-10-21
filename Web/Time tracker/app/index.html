@@ -13,21 +13,24 @@
 	<script src="../bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
 	<script src="../bower_components/angular/angular.js"></script>
 	<script src="../bower_components/angular-route/angular-route.min.js"></script>
-	
-	
+
+    <script src="assets/js/ui-bootstrap-tpls-0.12.1.js"></script>
+	<link rel="stylesheet" type="text/css" href="../bower_components/ngTimepicker/src/css/ngTimepicker.css">
+	<script src="../bower_components/ngTimepicker/src/js/ngTimepicker.min.js"></script>
+
 </head>
 <body>
 	<div class="wrapper">
 		<header>
 			<nav id="myNavbar" class="navbar navbar-default navbar-inverse" role="navigation">
-	   		<h2>Time Tracker</h2>
+	   			<h2>Time Tracker</h2>
 			</nav>
 		</header>
 		<div class="container" ng-view></div>
 		<footer>
 			<div class="copyright"><h4>@Copyright 2015</h4></div>
 		</footer>
-</div>
+	</div>
 
 <script src="scripts/app.js"></script>
 <script src="scripts/controllers/loginController.js"></script>

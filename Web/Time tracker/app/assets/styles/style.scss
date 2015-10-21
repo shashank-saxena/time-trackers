@@ -59,7 +59,7 @@ footer {
 .signup-form-container {
   border: 1px solid #fff;
   border-radius: 8px;
-  box-shadow: -1px -7px 31px -7px;
+  box-shadow:  1px -2px 22px -7px;
   padding: 21px;
 }
 .timesheet-container {
@@ -146,6 +146,52 @@ table {
 .align-txt {
     text-align:center; 
 }
+<<<<<<< HEAD
+.error-message {
+    color: #ff0000; 
+}
+
+.col-sm-12 {
+    .input-group {
+      margin-bottom: 10px;
+    }
+  
+}
+
+@media screen and (max-width: 360px) {
+ .form-group {
+   .input-group {
+     .work-description {
+       width:160px;
+       
+     }
+     }
+   }
+ }  
+ @media screen and (min-width: 767px) {
+ .form-group {
+   .input-group {
+     .work-description {
+       width:280px;
+       
+     }
+     }
+   }
+ }  
+  @media screen and (min-width: 1024px) {
+ .form-group {
+   .input-group {
+     .work-description {
+       width:490px;
+       
+     }
+     }
+   }
+ } 
+     
+
+
+=======
 .img {
   width: 15px;
 }
@@ -159,3 +205,4 @@ table {
     margin-top: 3px;
   }
 }
+>>>>>>> develop
