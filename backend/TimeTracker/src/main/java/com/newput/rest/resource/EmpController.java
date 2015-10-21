@@ -74,7 +74,6 @@ public class EmpController {
 	@Path("/register")
 	@POST
 	@Produces(MediaType.APPLICATION_JSON)
-	// @ExceptionHandler({TrackerException.class})
 	public JSONObject registerUser(@FormParam("firstName") String firstName, @FormParam("lastName") String lastName,
 			@FormParam("email") String email, @FormParam("dob") String dob, @FormParam("doj") String doj,
 			@FormParam("address") String address, @FormParam("contact") String contact,
@@ -191,28 +190,24 @@ public class EmpController {
 	public Response excelExport(@FormParam("empId") String emp_id, @FormParam("month") String monthName,
 			@FormParam("year") String year) {
 		ResponseBuilder response = null;
-		try {
-			if (emp_id != null && !emp_id.equalsIgnoreCase("")) {
-				if (monthName != null && !monthName.equalsIgnoreCase("")) {
-					if (util.validCheck(monthName, year)) {
-						File file = excelTimeSheet.createExcelSheet(Integer.parseInt(emp_id), monthName, year);
-						response = Response.ok((Object) file);
-						response.header("Content-Disposition", "attachment; filename=time-sheet.xls");
-					} else {
-						jsonResService.errorResponse("Record is not avail before November 2015");
-					}
+		if (emp_id != null && !emp_id.equalsIgnoreCase("")) {
+			if (monthName != null && !monthName.equalsIgnoreCase("")) {
+				if (util.validCheck(monthName, year)) {
+					File file = excelTimeSheet.createExcelSheet(Integer.parseInt(emp_id), monthName, year);
+					response = Response.ok((Object) file);
+					response.header("Content-Disposition", "attachment; filename=time-sheet.xls");
 				} else {
-					jsonResService.errorResponse("Please provide the month to select data");
+					jsonResService.errorResponse("Record is not avail before November 2015");
 				}
-
 			} else {
-				jsonResService.errorResponse("Please provide employee id to select data");
+				jsonResService.errorResponse("Please provide the month to select data");
 			}
-		} catch (Exception ex) {
-			jsonResService.errorResponse(new TrackerException("Invalid user").getMessage());
+		} else {
+			jsonResService.errorResponse("Please provide employee id to select data");
 		}
 		return response.build();
 	}
+	
 
 	@Path("/pwdVerify")
 	@POST

@@ -76,11 +76,9 @@ public class ExcelTimeSheet {
 				util.getMonthlyDate(monthName, year).get("maxDate"), "excelExport", workbook);
 
 		try {
-			//FileOutputStream outStream = new FileOutputStream(new File("C:/Users/ashu/Downloads/demo/timeSheet.xls"));
 			FileOutputStream outStream = new FileOutputStream(temp);
 			workbook.write(outStream);
 			outStream.close();
-			//jsonResService.setDataValue("timeSheet.xls file written successfully on disk.", "");
 			jsonResService.successResponse();
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -195,7 +193,7 @@ public class ExcelTimeSheet {
 		CellStyle style = workbook.createCellStyle();
 		Font font = workbook.createFont();
 		style.setAlignment(CellStyle.ALIGN_CENTER);
-		style.getDataFormat();
+		//style.getDataFormat();
 		font.setBoldweight(HSSFFont.BOLDWEIGHT_BOLD);
 		style.setFont(font);
 
