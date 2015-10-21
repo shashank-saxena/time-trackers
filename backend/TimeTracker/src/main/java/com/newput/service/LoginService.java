@@ -45,7 +45,7 @@ public class LoginService {
 		example.createCriteria().andEmailEqualTo(employee.getEmail()).andPasswordEqualTo(employee.getPassword());
 		List<Employee> employeeList = empMapper.selectByExample(example);
 		if (employeeList.isEmpty()) {
-			jsonResService.errorResponse("invalid user");
+			jsonResService.errorResponse("invalid user");			
 		} else {
 			Employee emp = employeeList.get(0);
 			SessionExample sessionExample = new SessionExample();
@@ -63,10 +63,10 @@ public class LoginService {
 						jsonResService.setDataValue("Welcome User created : " + emp.getFirstName(), session.getToken());
 						jsonResService.successResponse();
 					} else {
-						jsonResService.errorResponse("session token is not created");
+						jsonResService.errorResponse("session token is not created");						
 					}
 				} else {
-					jsonResService.errorResponse("email is not verified");
+					jsonResService.errorResponse("email is not verified");					
 				}
 			} else {
 				Session localSession = sessionList.get(0);
@@ -79,7 +79,7 @@ public class LoginService {
 					jsonResService.setDataValue("Welcome User updated : " + emp.getFirstName(),
 							localSession.getToken());
 				} else {
-					jsonResService.errorResponse("token is not update");
+					jsonResService.errorResponse("token is not update");					
 				}
 			}
 		}
