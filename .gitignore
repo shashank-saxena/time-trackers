@@ -8,9 +8,11 @@ backend/TimeTracker/.DS_Store
 backend/TimeTracker/.settings 
 backend/TimeTracker/.classpath
 backend/TimeTracker/.project
+backend/TimeTracker/.gitignore
 
 Web/.DS_Store
 Web/Time\ tracker/.DS_Store
 Web/Time\ tracker/.project
+Web/Time\ tracker/.settings/*
 Web/Time\ tracker/bower_components/*
 Web/Time\ tracker/node_modules/*
