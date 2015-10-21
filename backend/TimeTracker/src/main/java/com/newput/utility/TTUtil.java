@@ -196,25 +196,27 @@ public class TTUtil {
 		}
 	}
 
-//	public static void main(String args[]) throws ParseException {
-//		String dob = "10-10-1946";
-//		SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
-//		Date userDob = sdf.parse(dob);
-//		System.out.println(dateValidation(userDob));
-//	}
+	// public static void main(String args[]) throws ParseException {
+	// validCheck("nov", "2015");
+	// }
 
-	public boolean dateValidation(Date date) {
+	public boolean dateValidation(Date date, String flag) {
 		try {
-			Long minDate = -757402201000L;
+			Long minDate = 0L;
+			if (flag.equals("E")) {
+				minDate = 1443637800000L;
+			} else {
+				minDate = -757402201000L;
+			}
 			Long userDate = date.getTime();
-			
+
 			Calendar now = Calendar.getInstance();
 			int year = now.get(Calendar.YEAR);
 			int mnth = now.get(Calendar.MONTH);
 			int currDate = now.get(Calendar.DATE);
 			now.set(year, mnth, currDate);
 			long currValue = now.getTimeInMillis();
-			
+
 			if (userDate > minDate && userDate <= currValue) {
 				return true;
 			} else {
@@ -227,20 +229,29 @@ public class TTUtil {
 	}
 
 	public boolean validCheck(String month, String year) {
-//		Long startDate = 1446316199000L;
-		Long startDate = 1443637801000L; //01-10-2015
+		// Long startDate = 1446316199000L;
+		Long startDate = 1443637800000L; // 01-10-2015
+		int reqYear = 0;
 		try {
 			SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
 			Calendar calendar = Calendar.getInstance();
 			calendar.setTime(new SimpleDateFormat("MMM").parse(month));
 			int reqMnth = calendar.get(Calendar.MONTH);
 			calendar = Calendar.getInstance();
-			calendar.set(Calendar.YEAR, Integer.parseInt(year));
+			if (year != null && !year.equalsIgnoreCase("")) {
+				reqYear = Integer.parseInt(year);
+			} else {
+				reqYear = calendar.get(Calendar.YEAR);
+			}
+			calendar.set(Calendar.YEAR, reqYear);
 			calendar.set(Calendar.MONTH, reqMnth);
 			int min = calendar.getActualMinimum(Calendar.DAY_OF_MONTH);
 			calendar.set(Calendar.DAY_OF_MONTH, min);
 			long minDate = sdf.parse(sdf.format(calendar.getTime())).getTime();
-			if (minDate > startDate) {
+
+			calendar = Calendar.getInstance();
+			Long currTime = calendar.getTimeInMillis();
+			if ((minDate >= startDate) && (minDate <= currTime)) {
 				return true;
 			} else {
 				return false;

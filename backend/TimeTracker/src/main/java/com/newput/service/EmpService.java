@@ -50,8 +50,8 @@ public class EmpService {
 				if (employee.getContact() != null && !employee.getContact().equalsIgnoreCase("")) {
 					if (employee.getFirstName() != null && !employee.getFirstName().equalsIgnoreCase("")) {
 						if (employee.getLastName() != null && !employee.getLastName().equalsIgnoreCase("")) {
-							if (employee.getDob() != null && util.dateValidation(emp.getDob())) {
-								if (employee.getDoj() != null && util.dateValidation(emp.getDoj())) {
+							if (employee.getDob() != null && util.dateValidation(emp.getDob(),"")) {
+								if (employee.getDoj() != null && util.dateValidation(emp.getDoj(),"")) {
 									if (employee.getGender() != null && !employee.getGender().equalsIgnoreCase("")) {
 										i = empMapper.insertSelective(employee);
 										if (i > 0) {

@@ -1,6 +1,7 @@
 package com.newput.rest.resource;
 
 import java.io.File;
+import java.text.SimpleDateFormat;
 
 import javax.ws.rs.FormParam;
 import javax.ws.rs.POST;
@@ -143,15 +144,18 @@ public class EmpController {
 			@FormParam("nightOut") String nightOut, @FormParam("workDesc") String workDesc,
 			@FormParam("empId") String emp_id) {
 		try {
+			SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
 			if (workdate != null && !workdate.equalsIgnoreCase("")) {
 				if (emp_id != null && !emp_id.equalsIgnoreCase("")) {
-					int id = Integer.parseInt(emp_id);
-					timeSchedual.timeSheetValue(lunchIn, in, out, workdate, lunchOut, nightIn, nightOut, id);
-					if (workDesc != null && !workDesc.equalsIgnoreCase("")) {
+					if (util.dateValidation(sdf.parse(workdate), "E")) {
+						int id = Integer.parseInt(emp_id);
+						timeSchedual.timeSheetValue(lunchIn, in, out, workdate, lunchOut, nightIn, nightOut, id);
 						reqParser.setDateSheetValue(workDesc, workdate, id);
 						timeSchedual.dateSheetValue();
+						timeSchedual.clearMap();
+					} else {
+						jsonResService.errorResponse("Record is not avail.");
 					}
-					timeSchedual.clearMap();
 				} else {
 					jsonResService.errorResponse("emp_id can not be null");
 				}
@@ -197,7 +201,7 @@ public class EmpController {
 					response = Response.ok((Object) file);
 					response.header("Content-Disposition", "attachment; filename=time-sheet.xls");
 				} else {
-					jsonResService.errorResponse("Record is not avail before November 2015");
+					jsonResService.errorResponse("Record is not avail.");
 				}
 			} else {
 				jsonResService.errorResponse("Please provide the month to select data");
@@ -207,7 +211,6 @@ public class EmpController {
 		}
 		return response.build();
 	}
-	
 
 	@Path("/pwdVerify")
 	@POST
@@ -247,7 +250,7 @@ public class EmpController {
 					if (util.validCheck(monthName, year)) {
 						excel.monthSheet(monthName, Integer.parseInt(emp_id), year);
 					} else {
-						jsonResService.errorResponse("Record is not avail before November 2015");
+						jsonResService.errorResponse("Record is not avail.");
 					}
 				} else {
 					jsonResService.errorResponse("Please provide the month to select data");
@@ -276,7 +279,7 @@ public class EmpController {
 							file.delete();
 						}
 					} else {
-						jsonResService.errorResponse("Record is not avail before November 2015");
+						jsonResService.errorResponse("Record is not avail.");
 					}
 				} else {
 					jsonResService.errorResponse("Please provide the month to select data");
