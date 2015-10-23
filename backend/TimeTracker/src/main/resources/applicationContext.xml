@@ -42,7 +42,7 @@
 		<property name="username" value="deepti@newput.com" />
 		<property name="password" value="712august2015" />
 
-		<property name="javaMailProperties">
+	<property name="javaMailProperties">
 			<!-- additional properties specific to JavaMail -->
 			<props>
 				<prop key="mail.transport.protocol">smtp</prop>
@@ -63,46 +63,34 @@
 			</list>
 		</property>
 	</bean>
-
 	<bean id="scheduledCronService" class="com.newput.service.CronService" />
-
-	<!-- Notification cron for daily sheet fill -->
 	<bean id="dailyNotifyTrigger"
 		class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
 		<property name="jobDetail" ref="processDailyNotify" />
 		<property name="cronExpression" value="0 0 19 ? * MON-FRI" />
 	</bean>
-
 	<bean id="processDailyNotify"
 		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
 		<property name="targetObject" ref="scheduledCronService" />
 		<property name="targetMethod" value="dailyNotification" />
 		<property name="concurrent" value="false" />
 	</bean>
-
-	<!-- Mail with the excel sheet attachment weekly -->
-
 	<bean id="weeklyExcelTrigger"
 		class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
 		<property name="jobDetail" ref="processExcelNotify" />
 		<property name="cronExpression" value="0 0 19 ? * FRI" />
 	</bean>
-
 	<bean id="processExcelNotify"
 		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
 		<property name="targetObject" ref="scheduledCronService" />
 		<property name="targetMethod" value="emailSendJob" />
 		<property name="concurrent" value="false" />
 	</bean>
-
-<!-- Mail with the excel sheet attachment monthly -->
-
 	<bean id="monthlyExcelTrigger"
 		class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
 		<property name="jobDetail" ref="processMExcelNotify" />
-		<property name="cronExpression" value="0 0 1 * * " />
+		<property name="cronExpression" value="0 0 1 * * ?" />
 	</bean>
-
 	<bean id="processMExcelNotify"
 		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
 		<property name="targetObject" ref="scheduledCronService" />
