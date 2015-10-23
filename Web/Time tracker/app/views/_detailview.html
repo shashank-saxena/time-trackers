@@ -10,19 +10,21 @@
 					<div class="col-sm-12">
 				   		<label for="">Day</label>
 					    <div class="input-group">
-					        <input type="number" name="dayin" ng-model="timesheet.dayin" class="form-control"  placeholder="Start">
-					    	<div class="input-group-addon">To</div>
-					      	<input type="number" name="dayout" ng-model="timesheet.dayout" class="form-control"  placeholder="End">				      
+					        <input type="text" name="dayin" ng-model="timesheet.dayin" class="form-control"  placeholder="Start" mask='99:99'>
+					    		<div class="input-group-addon">To</div>
+					      	<input type="text" name="dayout" ng-model="timesheet.dayout" class="form-control"  placeholder="End" mask='99:99'>
 					    </div>
+					    <span ng-show="(detailview.$submitted && detailview.dayin.$invalid) || (detailview.dayin.$dirty && detailview.dayin.$invalid)"> Please enter correct time format.
+					    </span>
 				    </div>
 			    </div>
 		    	<div class="form-group">
 		    		<div class="col-sm-12">
 				   		<label  for="">Lunch</label>
 					    <div class="input-group">
-					        <input type="text" name="lunchin" ng-model="timesheet.lunchin" class="form-control" placeholder="Start">
+					        <input type="text" name="lunchin" ng-model="timesheet.lunchin" class="form-control" placeholder="Start" mask='99:99'>
 					    	<div class="input-group-addon">To</div>
-					      	<input type="text" name="lunchout" ng-model="timesheet.lunchout" class="form-control"  placeholder="End">			      
+					      	<input type="text" name="lunchout" ng-model="timesheet.lunchout" class="form-control"  placeholder="End" mask='99:99'>			      
 					    </div>
 				    </div>
 			    </div>
@@ -30,9 +32,9 @@
 			    	<div class="col-sm-12">
 				   		<label  for="">Night</label>
 					    <div class="input-group">
-					        <input type="text" name="nightin" ng-model="timesheet.nightin" class="form-control" placeholder="Start">
+					        <input type="text" name="nightin" ng-model="timesheet.nightin" class="form-control" placeholder="Start" mask='99:99'>
 					    	<div class="input-group-addon">To</div>
-					      	<input type="text" name="nightout" ng-model="timesheet.nightout" class="form-control"  placeholder="End">		      
+					      	<input type="text" name="nightout" ng-model="timesheet.nightout" class="form-control"  placeholder="End" mask='99:99'>		      
 					    </div>
 				    </div>
 			    </div>
