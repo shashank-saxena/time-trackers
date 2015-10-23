@@ -194,20 +194,22 @@ public class EmpController {
 	public Response excelExport(@FormParam("empId") String emp_id, @FormParam("month") String monthName,
 			@FormParam("year") String year) {
 		ResponseBuilder response = null;
+		File file = null;
 		if (emp_id != null && !emp_id.equalsIgnoreCase("")) {
 			if (monthName != null && !monthName.equalsIgnoreCase("")) {
 				if (util.validCheck(monthName, year)) {
-					File file = excelTimeSheet.createExcelSheet(Integer.parseInt(emp_id), monthName, year);
-					response = Response.ok((Object) file);
+					file = excelTimeSheet.createExcelSheet(Integer.parseInt(emp_id), monthName, year);
+					String[] parts = file.getPath().split("tempfile");
+					String part1 = parts[0]; 
+					File newFile = new File(part1+"time_sheet.xls");
+					file.renameTo(newFile);
+					response = Response.ok((Object) newFile);
 					response.header("Content-Disposition", "attachment; filename=time-sheet.xls");
-				} else {
-					jsonResService.errorResponse("Record is not avail.");
+					if (file.exists()) {
+						file.delete();
+					}
 				}
-			} else {
-				jsonResService.errorResponse("Please provide the month to select data");
-			}
-		} else {
-			jsonResService.errorResponse("Please provide employee id to select data");
+			} 
 		}
 		return response.build();
 	}
