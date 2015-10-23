@@ -33,7 +33,7 @@ public class EMailSender {
 
 	@Autowired
 	private JsonResService jsonResService;
-	
+
 	public void sendMail(String module) {
 
 		SimpleMailMessage email = new SimpleMailMessage();
@@ -51,21 +51,30 @@ public class EMailSender {
 
 	public void sendExcelSheet(String email, File file) {
 		MimeMessage message = mailSender.createMimeMessage();
-		if(email !=null && !email.equalsIgnoreCase("")){
+		if (email != null && !email.equalsIgnoreCase("")) {
 			try {
 				MimeMessageHelper helper = new MimeMessageHelper(message, true);
 				helper.setTo(email);
 				helper.setSubject("Your Time Sheet");
-				helper.setText("This is your time sheet please check it.");				
+				helper.setText("This is your time sheet please check it.");
 				FileSystemResource fileNew = new FileSystemResource(file.getPath());
-				helper.addAttachment("Time_Sheet.xls", fileNew);				
+				helper.addAttachment("Time_Sheet.xls", fileNew);
 			} catch (MessagingException e) {
-				throw new MailParseException(e);				
+				throw new MailParseException(e);
 			}
-			mailSender.send(message);				
+			mailSender.send(message);
 			jsonResService.setDataValue("Your time sheet succefully send to your registered mail id.", "");
-		}else{
-			jsonResService.errorResponse("Your mail id is not valid.");			
-		}		
+		} else {
+			jsonResService.errorResponse("Your mail id is not valid.");
+		}
+	}
+
+	public void notificationMail(Employee emp) {
+
+		SimpleMailMessage email = new SimpleMailMessage();
+		email.setTo(emp.getEmail());
+		email.setSubject("Notification Mail");
+		email.setText("Welcome, Please fill your daily status for today.Please ignore if already filled.");
+		mailSender.send(email);
 	}
 }

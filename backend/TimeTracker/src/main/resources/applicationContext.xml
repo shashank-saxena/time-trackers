@@ -10,14 +10,10 @@
 	<context:component-scan base-package="com.newput.domain" />
 	<context:component-scan base-package="com.newput.service" />
 	<context:component-scan base-package="com.newput.rest.resource" />
-	<context:component-scan base-package="com.newput.utility" /> 
+	<context:component-scan base-package="com.newput.utility" />
 	<context:annotation-config />
-	<context:property-placeholder location="classpath:status.properties" />
 
 	<tx:annotation-driven transaction-manager="transactionManager" />
-	<!-- <context:property-placeholder location="classpath:status.properties" 
-		/> -->
-
 	<bean id="dataSource"
 		class="org.springframework.jdbc.datasource.DriverManagerDataSource">
 		<property name="driverClassName" value="com.mysql.jdbc.Driver" />
@@ -58,7 +54,61 @@
 		</property>
 	</bean>
 
-	<!-- <bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer"> 
-		<property name="locations"> <list> <value>classpath:status.properties</value> 
-		</list> </property> </bean> -->
+	<bean class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
+		<property name="triggers">
+			<list>
+				<ref bean="dailyNotifyTrigger" />
+				<ref bean="weeklyExcelTrigger" />
+				<ref bean="monthlyExcelTrigger" />
+			</list>
+		</property>
+	</bean>
+
+	<bean id="scheduledCronService" class="com.newput.service.CronService" />
+
+	<!-- Notification cron for daily sheet fill -->
+	<bean id="dailyNotifyTrigger"
+		class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+		<property name="jobDetail" ref="processDailyNotify" />
+		<property name="cronExpression" value="0 0 19 ? * MON-FRI" />
+	</bean>
+
+	<bean id="processDailyNotify"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="scheduledCronService" />
+		<property name="targetMethod" value="dailyNotification" />
+		<property name="concurrent" value="false" />
+	</bean>
+
+	<!-- Mail with the excel sheet attachment weekly -->
+
+	<bean id="weeklyExcelTrigger"
+		class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+		<property name="jobDetail" ref="processExcelNotify" />
+		<property name="cronExpression" value="0 0 19 ? * FRI" />
+	</bean>
+
+	<bean id="processExcelNotify"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="scheduledCronService" />
+		<property name="targetMethod" value="emailSendJob" />
+		<property name="concurrent" value="false" />
+	</bean>
+
+<!-- Mail with the excel sheet attachment monthly -->
+
+	<bean id="monthlyExcelTrigger"
+		class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+		<property name="jobDetail" ref="processMExcelNotify" />
+		<property name="cronExpression" value="0 0 1 * * " />
+	</bean>
+
+	<bean id="processMExcelNotify"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="scheduledCronService" />
+		<property name="targetMethod" value="emailSendJob" />
+		<property name="concurrent" value="false" />
+	</bean>
+
+
 </beans>
