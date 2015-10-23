@@ -1,3 +1,4 @@
+
 app.factory("userServices", ['$http', '$q', function($http, $q){
 	var userJsonData = [];
 	return {
@@ -8,6 +9,5 @@ app.factory("userServices", ['$http', '$q', function($http, $q){
 		getProperty: function() {
       return userJsonData;
     }
-	};
 	
 }]);
