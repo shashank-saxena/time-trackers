@@ -1,6 +1,7 @@
 app.controller('signUpController', ['$scope', 'signupUser', function($scope, signupUser){	
 	$scope.errorMessage = null;
-	this.userSignUp = function(user) {
+	//user signup
+	this.userSignUp = function() {
 		var userReg = $scope.user;
 		var age=$scope.calculateAge(userReg.dateofbirth);
 		if(age<18) {
@@ -8,9 +9,19 @@ app.controller('signUpController', ['$scope', 'signupUser', function($scope, sig
 			return ;
 		}
 		resetForm();
-
+		
+		var dataPromise = userServices.registerUser($scope.user);
+				dataPromise.then(function(response) {
+					$scope.user = response;  console.log('service rseult'+response);
+				},function(error) {
+					//$scope.status = error;  
+					$scope.errorMessage = error;
+				});
+		this.resetForm();
+		
 	};
-	$scope.copareDate = function(user) {
+	
+	$scope.compareDate = function(user) {
 		var dob = $scope.user.dateofbirth;
 		var doj = $scope.user.dateofjoining;
 		resetForm();
@@ -58,59 +69,7 @@ app.controller('signUpController', ['$scope', 'signupUser', function($scope, sig
 	resetForm = function(){
 	    $scope.errorMessage = null;
 	};	
+
 }]);
 
 
-
-
-
-
-
-
-
-
-
-
-
-/*
-   this.scope = $scope;
-    // Set up the default scope value.
-    this.scope.errorMessage = null;
-
-
-	this.userSignUp = function(user) {
-		console.log($scope.user);
-		this.dateOfBirth =  document.getElementById("datetimepicker").value;
-		 this.dateOfJoining =  document.getElementById("datetimepicker1").value;
-	    
-	   if(!this.dateOfBirth || !this.dateOfJoining) {
-	   	 this.scope.errorMessage = "Please Select Both Date.";
-	   	 return;
-	   } 
-	    
-		var dataPromise = signupUser.postUserSignUp($scope.user);
-		dataPromise.then(function(response) {
-			$scope.user = response;  
-		},function(error) {
-			$scope.status = error;  
-		});
-		
-		 this.resetForm();
-	};
-	resetForm = function(){alert('sdsd');
-	            this.scope.errorMessage = null;
-	            this.dateOfBirth = "";
-	            this.dateOfJoining = "";
-	};
-
-	$scope.datepickerOptions = {
-					format: 'yyyy-mm-dd',
-					language: 'fr',
-					startDate: "2015-01-01",
-					endDate: "2015-10-31",
-					autoclose: true,
-					weekStart: 0
-		};
-		
-	$('#datetimepicker').datetimepicker();
-    $('#datetimepicker1').datetimepicker();*/
